@@ -664,12 +664,12 @@
                FRICTION = pérdida proporcional a la velocidad · ROLL = frenado constante por frame */
             const FRICTION = 0.9955, ROLL = 0.005, MIN_V = 0.06, SUB = 5;
             const BALL_REST = 0.97, WALL_REST = 0.82;
-            const MAX_SPEED = 30, MAX_PULL = 160;
+            const MAX_SPEED = 20, MAX_PULL = 160;
             const STEP = 1000 / 60;
             const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
             const NAMES_L = ['HAROL', 'JOSE', 'MILTON', 'ANDERSON'];     // tabla izquierda
-            const NAMES_R = ['MARLON', 'PEDRO', 'OJONA'];                // tabla derecha
+            const NAMES_R = ['MARLON', 'PEDRO', 'PAOLO'];                // tabla derecha
             const ALL_NAMES = [...NAMES_L, ...NAMES_R];
 
             /* Mesa real: 6 troneras (4 esquinas + 2 centrales). Las de esquina son un poco más grandes. */
