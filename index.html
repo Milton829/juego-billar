@@ -355,11 +355,11 @@
             /* ---------- Geometría de la mesa: bandas, hocicos (jaws) y troneras ----------
                Las bandas son segmentos entre troneras; los extremos son "nudillos" redondeados que
                hacen rebotar la bola cuando entra mal en la boca de la tronera. */
-            const CG = 30, MG = 20, KR = 3.5;      // hueco de esquina · medio hueco central · radio del nudillo
+            const CG = 30, MG = 30, KR = 1.5;      // hueco de esquina · medio hueco central · radio del nudillo
             const POCKETS = [
-                {x: X0 - 5, y: Y0 - 5, r: 22}, {x: X1 + 5, y: Y0 - 5, r: 22},
-                {x: X0 - 5, y: Y1 + 5, r: 22}, {x: X1 + 5, y: Y1 + 5, r: 22},
-                {x: MIDX, y: Y0 - 8, r: 19}, {x: MIDX, y: Y1 + 8, r: 19}
+                {x: X0 - 5, y: Y0 - 2, r: 10}, {x: X1 + 3, y: Y0 - 3, r: 10},
+                {x: X0 - 5, y: Y1 + 5, r: 10}, {x: X1 + 3, y: Y1 + 3, r: 10},
+                {x: MIDX, y: Y0 - 5, r: 10}, {x: MIDX, y: Y1 + 3, r: 10}
             ];
             const mkSeg = (ax, ay, bx, by, nx, ny) => {
                 const len = Math.hypot(bx - ax, by - ay);
