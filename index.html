@@ -340,10 +340,10 @@
             const MIDY = (Y0 + Y1) / 2, MIDX = (X0 + X1) / 2;
             const R = 12, TAU = Math.PI * 2;
             /* FÍSICA: FRICTION = pérdida proporcional a la velocidad · ROLL = frenado constante por frame */
-            const FRICTION = 0.9955, ROLL = 0.005, MIN_V = 0.06, SUB = 8;
-            const BALL_REST = 0.96;
-            const MAX_SPEED = 25, MAX_PULL = 160;
-            const STEP = 1000 / 60;
+            const FRICTION = 0.9955, ROLL = 0.002, MIN_V = 0.03, SUB = 4;
+            const BALL_REST = 0.40;
+            const MAX_SPEED = 20, MAX_PULL = 160;
+            const STEP = 1000 / 120;
             const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
             const NAMES_L = ['HAROL', 'JOSE', 'MILTON', 'ANDERSON'];
