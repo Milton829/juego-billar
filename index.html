@@ -56,13 +56,13 @@
                 box-shadow: 0 20px 50px rgba(0,0,0,.6); touch-action: none; cursor: crosshair;
             }
             #bgbox { position: fixed; inset: 0; overflow: hidden; z-index: -2; pointer-events: none; background: #0f131a; }
-            #bgbox iframe {
-                position: absolute; top: 50%; left: 50%; width: max(100vw, 177.78vh); height: max(56.25vw, 100vh);
-                transform: translate(-50%, -50%); border: 0;
-            }
+            #bgbox { background: radial-gradient(ellipse at 50% 28%, #222833, #0f131a 70%); }
+            #bgbox iframe { display: none; }
             #veil { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(circle at 50% 40%, rgba(8,10,16,.25), rgba(8,10,16,.65)); }
             #ytbox { position: fixed; right: 0; bottom: 0; width: 200px; height: 200px; opacity: .01; pointer-events: none; z-index: -1; }
             #msg { margin: 0; min-height: 20px; font-size: 14px; color: #b8c4d6; text-align: center; text-shadow: 0 1px 4px #000; }
+            .watermark { position: fixed; right: 12px; bottom: 10px; z-index: 20; padding: 7px 11px; border: 1px solid rgba(255,215,94,.28); border-radius: 999px; color: #e8d39a; background: rgba(8,10,14,.78); font-size: 12px; text-decoration: none; backdrop-filter: blur(5px); }
+            .watermark:hover { color: #fff0bd; border-color: rgba(255,215,94,.65); }
 
             #spinBox {
                 display: none; align-items: center; gap: 8px; background: #1b212b; border: 2px solid #323b4a;
@@ -98,8 +98,12 @@
             }
             .panel h2 { margin: 0 0 6px; text-align: center; font-size: 28px; color: #ffd75e; }
             .panel .sub { margin: 0 0 20px; text-align: center; color: #9fb0c8; font-size: 14px; }
-            .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-            @media (max-width: 720px) { .modes { grid-template-columns: 1fr; } }
+            .modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+            #menu .panel { max-width: 1080px; }
+            #menu .mode { padding: 14px; }
+            #menu .mode .top { margin-bottom: 4px; }
+            #menu .mode h3 { font-size: 19px; }
+            @media (max-width: 720px) { .modes, #menu .modes { grid-template-columns: 1fr; } }
             .mode { background: #1b212b; border: 3px solid #323b4a; border-radius: 18px; padding: 18px; cursor: pointer; transition: .15s; }
             .mode:hover { border-color: #6b7a92; }
             .mode.sel { border-color: #ffd75e; box-shadow: 0 0 22px rgba(255,215,94,.35); }
@@ -113,6 +117,7 @@
             .mode h3 { margin: 0; font-size: 22px; }
             .mode ul { margin: 6px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.5; color: #c8d3e3; }
             .mode p { margin: 6px 0 0; font-size: 14px; color: #c8d3e3; line-height: 1.45; }
+            #menu .mode p { font-size: 13px; }
             .opt { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0 6px; font-size: 15px; cursor: pointer; }
             .opt + .opt { margin-top: 8px; }
             .opt input { width: 20px; height: 20px; accent-color: #ffd75e; cursor: pointer; }
@@ -148,11 +153,11 @@
             .cuecard.lock { opacity: .5; cursor: not-allowed; }
             .cuecard.lock::after { content: "🔒"; position: absolute; top: 6px; right: 8px; font-size: 16px; }
             .cuecard.prem {
-                grid-column: 1 / -1; border-color: #ffcf5a; font-size: 15px;
-                background: linear-gradient(135deg, #3a0a06, #1b212b 55%, #3a1a06);
-                animation: glowp 1.8s ease-in-out infinite alternate;
+                grid-column: auto; border-color: #8b7440; font-size: 13px;
+                background: linear-gradient(135deg, #111318, #1b212b 55%, #0c0e12);
+                animation: glowp 2.4s ease-in-out infinite alternate;
             }
-            @keyframes glowp { from { box-shadow: 0 0 10px rgba(255,90,30,.45); } to { box-shadow: 0 0 30px rgba(255,210,80,.9); } }
+            @keyframes glowp { from { box-shadow: 0 0 5px rgba(180,150,80,.18); } to { box-shadow: 0 0 12px rgba(210,180,100,.32); } }
             .cuecard canvas { width: 100%; height: auto; display: block; margin-bottom: 4px; }
             .cuecard span { color: #7f8da3; font-weight: 400; margin-right: 4px; }
             .cuecard .ex { display: block; color: #ffcf5a; font-size: 12px; letter-spacing: 1px; }
@@ -199,6 +204,7 @@
             <aside class="board" id="boardR"></aside>
         </div>
         <div id="ytbox"><div id="yt"></div></div>
+        <a class="watermark" href="https://github.com/Milton829/juego-billar" target="_blank" rel="noopener noreferrer">Hu_tao0307 · Ver proyecto en GitHub</a>
 
         <!-- ===== INICIO: contra jugador o contra la computadora ===== -->
         <div class="screen open" id="home">
@@ -234,28 +240,13 @@
                 <h2>🎱 Don Pío Billar</h2>
                 <p class="sub">Elige el modo de juego</p>
                 <div class="modes">
-                    <div class="mode" data-mode="8">
-                        <div class="top"><div class="badge">8</div><h3>Bola 8</h3></div>
-                        <ul>
-                            <li>15 bolas y la blanca. Un jugador va por las <b>lisas (1-7)</b> y el otro por las <b>rayadas (9-15)</b>.</li>
-                            <li>Tras el saque la mesa está abierta: la primera bola embocada define tu grupo.</li>
-                            <li>Si emboca una bola de tu grupo, sigues tirando.</li>
-                            <li>Debes tocar primero una bola de tu grupo, y alguna bola debe tocar banda.</li>
-                            <li><b>Falta</b> (blanca en tronera, golpe incorrecto…): bola en mano para el rival.</li>
-                            <li><b>Gana</b> quien emboca todas las suyas y luego la 8. Pierde quien mete la 8 antes de tiempo o con falta.</li>
-                        </ul>
-                    </div>
-                    <div class="mode" data-mode="9">
-                        <div class="top"><div class="badge b9">9</div><h3>Bola 9</h3></div>
-                        <ul>
-                            <li>9 bolas numeradas en forma de rombo y la blanca.</li>
-                            <li>La blanca debe tocar <b>siempre primero la bola de menor número</b> que quede en mesa.</li>
-                            <li>Cualquier bola embocada legalmente te deja seguir tirando.</li>
-                            <li>Alguna bola debe tocar banda tras el contacto.</li>
-                            <li><b>Falta</b>: bola en mano para el rival. Si la 9 cae en una falta, vuelve a la mesa.</li>
-                            <li><b>Gana</b> quien emboca la 9 de forma legal (incluso en el saque o de combinación).</li>
-                        </ul>
-                    </div>
+                    <div class="mode" data-mode="8"><div class="top"><div class="badge">8</div><h3>Bola 8</h3></div><p>Grupos de lisas y rayadas. Limpia tu grupo y emboca la 8 al final.</p></div>
+                    <div class="mode" data-mode="9"><div class="top"><div class="badge b9">9</div><h3>Bola 9</h3></div><p>Toca primero la bola menor. Gana quien emboca legalmente la 9.</p></div>
+                    <div class="mode" data-mode="7"><div class="top"><div class="badge">7</div><h3>Bola 7</h3></div><p>Rombo de siete bolas; toca primero la menor y gana con la 7.</p></div>
+                    <div class="mode" data-mode="10"><div class="top"><div class="badge">10</div><h3>Bola 10</h3></div><p>Triángulo de diez bolas; toca primero la menor y gana con la 10.</p></div>
+                    <div class="mode" data-mode="14"><div class="top"><div class="badge em">14</div><h3>Pool continuo</h3></div><p>Cualquier bola puede ser objetivo. Suma una por cada bola embocada; meta: 8.</p></div>
+                    <div class="mode" data-mode="15"><div class="top"><div class="badge">61</div><h3>Rotación 61</h3></div><p>Toca primero la menor; cada bola vale su número. Meta: 61 puntos.</p></div>
+                    <div class="mode" data-mode="16"><div class="top"><div class="badge em">↗</div><h3>Banco</h3></div><p>La bola que puntúa debe tocar banda antes de caer. Meta: 5 bolas.</p></div>
                 </div>
                 <label class="opt"><input type="checkbox" id="fxChk"> <span>Jugar con <b>efectos</b> en la bola <small>(seguir, retro y lateral)</small></span></label>
                 <label class="opt"><input type="checkbox" id="aimChk"> <span>Mostrar <b>ayuda de disparo</b> <small>(línea guía y bola fantasma)</small></span></label>
@@ -341,10 +332,10 @@
             const R = 12, TAU = Math.PI * 2;
             /* FÍSICA: FRICTION = pérdida proporcional a la velocidad · ROLL = frenado constante por frame */
             const FRICTION = 0.9955, ROLL = 0.002, MIN_V = 0.03, SUB = 4;
-            const BALL_REST = 0.40;
+            const BALL_REST = 0.92;
             const MAX_SPEED = 20, MAX_PULL = 160;
             const STEP = 1000 / 120;
-            const DPR = Math.min(window.devicePixelRatio || 1, 2);
+            const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
 
             const NAMES_L = ['HAROL', 'JOSE', 'MILTON', 'ANDERSON'];
             const NAMES_R = ['MARLON', 'PEDRO', 'OJONA'];
@@ -355,11 +346,11 @@
             /* ---------- Geometría de la mesa: bandas, hocicos (jaws) y troneras ----------
                Las bandas son segmentos entre troneras; los extremos son "nudillos" redondeados que
                hacen rebotar la bola cuando entra mal en la boca de la tronera. */
-            const CG = 30, MG = 30, KR = 1.5;      // hueco de esquina · medio hueco central · radio del nudillo
+            const CG = 30, MG = 30, KR = 3.5;      // hueco de esquina · medio hueco central · radio del nudillo
             const POCKETS = [
-                {x: X0 - 5, y: Y0 - 2, r: 10}, {x: X1 + 3, y: Y0 - 3, r: 10},
-                {x: X0 - 5, y: Y1 + 5, r: 10}, {x: X1 + 3, y: Y1 + 3, r: 10},
-                {x: MIDX, y: Y0 - 5, r: 10}, {x: MIDX, y: Y1 + 3, r: 10}
+                {x: X0 - 5, y: Y0 - 2, r: 18}, {x: X1 + 3, y: Y0 - 3, r: 18},
+                {x: X0 - 5, y: Y1 + 5, r: 18}, {x: X1 + 3, y: Y1 + 3, r: 18},
+                {x: MIDX, y: Y0 - 5, r: 16}, {x: MIDX, y: Y1 + 3, r: 16}
             ];
             const mkSeg = (ax, ay, bx, by, nx, ny) => {
                 const len = Math.hypot(bx - ax, by - ay);
@@ -499,9 +490,29 @@
                 fx: ['aura', 'smoke', 'flame', 'ghostfire', 'runering', 'butterflies', 'embers', 'orbit', 'shine', 'pulse', 'spark', 'tipflare'],
                 fh: [24, 0], sc: '70,10,10', fc: '#ff5a2a', fc2: '#ffcf5a', fc3: '#d8a0ff'
             });
+            const JOSE_CUE = CUES.length;
+            CUES.push({
+                n: 'Rayo Celeste · JOSE', ex: 'JOSE',
+                s: ['#e7ffff', '#35d8ff', '#1451c2', '#071333'],
+                k: 'electric', a: '#d7ffff', k2: 'rings', a2: '#7df2ff', b2: '#7df2ff',
+                fx: ['aura', 'electric', 'ice', 'spark', 'orbit'], fc: '#39dfff', fc2: '#d7ffff'
+            });
+            const MARLON_CUE = CUES.length;
+            CUES.push({
+                n: 'Sombra de Acero · MARLON', ex: 'MARLON',
+                s: ['#aeb4bd', '#454a52', '#171a20', '#050608'],
+                k: 'scales', a: '#d2d6dc', k2: 'gems', g: ['#d7dbe2', '#6f7783'],
+                fx: ['aura', 'smoke', 'electric', 'pulse', 'orbit'], fc: '#aeb7c2', fc2: '#e1e5eb'
+            });
             CUES.forEach(d => {
                 d.fxl = d.fx ? [].concat(d.fx) : [];
             });
+            const cueFxColor = d => {
+                if (Array.isArray(d.trail))
+                    return d.trail;
+                const hex = String(d.fc || d.fc2 || d.a || '#ffd75e').match(/^#([0-9a-f]{6})$/i);
+                return hex ? [parseInt(hex[1].slice(0, 2), 16), parseInt(hex[1].slice(2, 4), 16), parseInt(hex[1].slice(4, 6), 16)] : [255, 215, 94];
+            };
             const cueAllowed = (i, nm) => !CUES[i].ex || CUES[i].ex === nm;
 
             const rnd = (i, s) => {
@@ -1309,7 +1320,8 @@
             });
 
             let balls = [], cue, potted = [];
-            let mode = 8;
+            const MODE_NAMES = {8: 'Bola 8', 9: 'Bola 9', 7: 'Bola 7', 10: 'Bola 10', 14: 'Pool continuo', 15: 'Rotación 61', 16: 'Banco'};
+            let mode = 8, modeScores = [0, 0];
             let vsCpu = false, diff = 'normal';
             let player = 0, groups = [null, null], winner = -1;
             let inHand = false, breakShot = true;
@@ -1323,7 +1335,8 @@
             let sfxOn = true;
             let names = [ALL_NAMES[0], ALL_NAMES[4]];
             let cueIdx = [0, 1], sprites = [null, null], cueStep = 0;
-            let sinks = [], parts = [], maxV = 0, trailCol = null;
+            let sinks = [], parts = [], maxV = 0, trailCol = null, trailTick = 0;
+            let shotBanks = new Set();
             let tableIdx = 0, tableLayer = null;
             let bot = null, botT = 0;
 
@@ -1333,7 +1346,7 @@
             /* ---------- Preferencias guardadas ---------- */
             try {
                 const pr = JSON.parse(localStorage.getItem('donpio_prefs') || '{}');
-                if (pr.mode === 8 || pr.mode === 9)
+                if (MODE_NAMES[pr.mode])
                     mode = pr.mode;
                 if (Array.isArray(pr.names) && pr.names.length === 2 && pr.names.every(n => ALL_NAMES.includes(n)) && pr.names[0] !== pr.names[1])
                     names = pr.names.slice();
@@ -1412,6 +1425,7 @@
             const typeOf = n => n === 8 ? 'ocho' : n < 8 ? 'lisas' : 'rayadas';
             const left = g => balls.filter(b => b.on && b.n && typeOf(b.n) === g).length;
             const lowest = () => balls.reduce((m, b) => (b.on && b.n && b.n < m) ? b.n : m, 99);
+            const lowFirstMode = () => mode === 7 || mode === 9 || mode === 10 || mode === 15;
 
             function rr(g, x, y, w, h, r) {
                 g.beginPath();
@@ -1666,7 +1680,7 @@
                 SET = BALL_SETS[i];
             }
 
-            const BQ = DPR > 1 ? 3.5 : 3;
+            const BQ = DPR > 1 ? 2.4 : 2.8;
             const SS = 2 * R + 2;
             const N = Math.ceil(SS * BQ);
             const RP = R * BQ;
@@ -1860,7 +1874,7 @@
                 {n: 'Rojo Casino', felt: ['#d4262e', '#7d1016'], cush: ['#4a0a10', '#b02028'], rail: ['#5a2418', '#1c0806'], railHi: 'rgba(255,215,140,.22)', sight: '#ffd24a', grain: true, prim: ['#8a5a20', '#2a160a', '#0a0402'], spot: 'rgba(255,230,160,.4)'},
                 {n: 'Púrpura Real', felt: ['#8a44d6', '#431a78'], cush: ['#2a0f4a', '#6a30b4'], rail: ['#1d1226', '#07040c'], railHi: 'rgba(240,200,80,.3)', sight: '#f2c230', dots: true, prim: ['#8a6a20', '#2a1a40', '#07040c'], spot: 'rgba(255,230,160,.4)'},
                 {n: 'Gris Torneo', felt: ['#8896a4', '#4a5662'], cush: ['#2e3842', '#6e7d8c'], rail: ['#d2d9e1', '#6b7684'], railHi: 'rgba(255,255,255,.55)', sight: '#14181d', dots: true, prim: ['#8a919a', '#3a3f46', '#0c0e10'], spot: 'rgba(255,255,255,.35)'},
-                {n: 'Don Pío · Exclusiva', ex: true, felt: ['#17171a', '#030304'], cush: ['#050505', '#26262b'], rail: ['#18181a', '#000000'], railHi: 'rgba(255,255,255,.12)', trim: '#ff5a1f', sight: '#ff7a1e', dots: true, logo: true, prim: ['#ff7a1e', '#1a0e06', '#000000'], spot: 'rgba(255,122,30,.55)'}
+                {n: 'Don Pío · Exclusiva', ex: true, felt: ['#111113', '#080809'], cush: ['#050505', '#171719'], rail: ['#141416', '#000000'], railHi: 'rgba(255,255,255,.055)', trim: '#743014', sight: '#a84c22', dots: true, logo: true, prim: ['#8a421c', '#160d08', '#000000'], spot: 'rgba(190,94,48,.24)'}
             ];
             const tableCache = {};
             function getTable(i) {
@@ -1899,7 +1913,7 @@
                 if (T.trim) {
                     g.save();
                     g.shadowColor = T.trim;
-                    g.shadowBlur = 12;
+                    g.shadowBlur = 5;
                     rr(g, 9, 9, W - 18, H - 18, 22);
                     g.strokeStyle = T.trim;
                     g.lineWidth = 2.5;
@@ -1981,9 +1995,9 @@
                 // Logo y texto de la mesa exclusiva
                 if (T.logo) {
                     g.save();
-                    g.shadowColor = 'rgba(255,90,20,.55)';
-                    g.shadowBlur = 22;
-                    drawLogo(g, MIDX, MIDY - 28, 470, .95);
+                    g.shadowColor = 'rgba(180,75,30,.3)';
+                    g.shadowBlur = 8;
+                    drawLogo(g, MIDX, MIDY - 28, 430, .72);
                     g.restore();
                     g.save();
                     g.textAlign = 'center';
@@ -1995,8 +2009,8 @@
                         tw += g.measureText(ch).width + sp;
                     tw -= sp;
                     let x = MIDX - tw / 2;
-                    g.shadowColor = 'rgba(255,90,20,.8)';
-                    g.shadowBlur = 16;
+                    g.shadowColor = 'rgba(160,65,25,.35)';
+                    g.shadowBlur = 7;
                     g.fillStyle = '#ff7a1e';
                     g.textAlign = 'left';
                     for (const ch of word) {
@@ -2140,15 +2154,20 @@
             function hud() {
                 for (let i = 0; i < 2; i++) {
                     let info;
-                    if (mode === 9) {
-                        const l = lowest();
-                        info = i === player && !gameOver ? `Bola objetivo: ${l === 99 ? '—' : l}` : 'En espera';
-                    } else {
+                    if (mode === 8) {
                         const g = groups[i];
-                        info = !g ? 'Mesa abierta' : left(g) ? `${g[0].toUpperCase() + g.slice(1)} · quedan ${left(g)}` : 'Va por la 8';
-                    }
-                    const nm = isBot(i) ? `🤖 ${BOT_NAME} (${DIFF_LABEL[diff]})` : names[i];
-                    $p[i].innerHTML = `Jugador ${i + 1} · ${nm}<b>${info}</b>`;
+                        info = !g ? 'Mesa abierta' : left(g) ? g[0].toUpperCase() + g.slice(1) + ' · quedan ' + left(g) : 'Va por la 8';
+                    } else if (lowFirstMode()) {
+                        const l = lowest();
+                        info = i === player && !gameOver ? 'Bola objetivo: ' + (l === 99 ? '—' : l) : 'En espera';
+                        if (mode === 15)
+                            info = modeScores[i] + ' / 61 puntos · ' + (i === player && !gameOver ? 'objetivo ' + (l === 99 ? '—' : l) : 'en espera');
+                    } else if (mode === 14)
+                        info = modeScores[i] + ' / 8 puntos';
+                    else
+                        info = modeScores[i] + ' / 5 bolas a banda';
+                    const nm = isBot(i) ? '🤖 ' + BOT_NAME + ' (' + DIFF_LABEL[diff] + ')' : names[i];
+                    $p[i].innerHTML = 'Jugador ' + (i + 1) + ' · ' + nm + '<b>' + info + '</b>';
                     $p[i].classList.toggle('on', i === player && winner < 0);
                 }
                 drawIcons();
@@ -2159,6 +2178,7 @@
              ============================================================ */
             function newGame() {
                 pickSet();
+                modeScores = [0, 0];
                 iconCache = {};
                 balls = [];
                 potted = [];
@@ -2185,22 +2205,33 @@
                 cue = makeBall(0, X0 + 225, MIDY);
                 balls.push(cue);
                 const dx = 2 * R * Math.cos(Math.PI / 6) + .6, dy = 2 * R + .6, fx = X0 + 675;
-                if (mode === 8) {
-                    const rows = [[1], [9, 2], [10, 8, 3], [11, 4, 12, 5], [6, 13, 7, 14, 15]];
-                    rows.forEach((row, i) => row.forEach((n, j) =>
-                            balls.push(makeBall(n, fx + i * dx, MIDY + (j - i / 2) * dy))));
-                } else {
-                    const rest = [2, 3, 4, 5, 6, 7, 8];
-                    for (let i = rest.length - 1; i > 0; i--) {
+                const addRows = rows => rows.forEach((row, i) => row.forEach((n, j) =>
+                    balls.push(makeBall(n, fx + i * dx, MIDY + (j - (row.length - 1) / 2) * dy))));
+                const shuffled = values => {
+                    const out = values.slice();
+                    for (let i = out.length - 1; i > 0; i--) {
                         const j = Math.random() * (i + 1) | 0;
-                        [rest[i], rest[j]] = [rest[j], rest[i]];
+                        [out[i], out[j]] = [out[j], out[i]];
                     }
-                    const rows = [[1], [rest[0], rest[1]], [rest[2], 9, rest[3]], [rest[4], rest[5]], [rest[6]]];
-                    rows.forEach((row, i) => row.forEach((n, j) =>
-                            balls.push(makeBall(n, fx + i * dx, MIDY + (j - (row.length - 1) / 2) * dy))));
+                    return out;
+                };
+                if (mode === 8) {
+                    addRows([[1], [9, 2], [10, 8, 3], [11, 4, 12, 5], [6, 13, 7, 14, 15]]);
+                } else if (mode === 9) {
+                    const rest = shuffled([2, 3, 4, 5, 6, 7, 8]);
+                    addRows([[1], [rest[0], rest[1]], [rest[2], 9, rest[3]], [rest[4], rest[5]], [rest[6]]]);
+                } else if (mode === 7) {
+                    const rest = shuffled([2, 3, 4, 5, 6]);
+                    addRows([[1], [rest[0], rest[1]], [rest[2], 7, rest[3]], [rest[4]]]);
+                } else if (mode === 10) {
+                    const rest = shuffled([2, 3, 4, 5, 6, 7, 8, 9]);
+                    addRows([[1], [rest[0], rest[1]], [rest[2], 10, rest[3]], [rest[4], rest[5], rest[6], rest[7]]]);
+                } else {
+                    const rest = shuffled([2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14]);
+                    addRows([[1], [rest[0], rest[1]], [rest[2], 8, rest[3]], [rest[4], rest[5], rest[6], rest[7]], [rest[8], rest[9], 15, rest[10], rest[11]]]);
                 }
                 hud();
-                say(`${mode === 9 ? 'Bola 9' : 'Bola 8'} · bolas ${SET.n} · Turno de ${pn(0)} (saque). La bola va hacia el ratón: mantén el clic, arrastra hacia la blanca para cargar fuerza y suelta.`);
+                say(MODE_NAMES[mode] + ' · Turno de ' + pn(0) + ' (saque). Apunta con el ratón, mantén y arrastra desde la blanca para cargar fuerza; suelta para tirar.');
             }
 
             function placeAt(bl, hx, hy) {
@@ -2234,13 +2265,14 @@
                         p = q;
                     }
                 }
-                sinks.push({b, x: b.x, y: b.y, px: p.x, py: p.y, t: 0, dur: 34});
-                const c = (b.n ? b.col : b.set.cue).map(v => Math.min(255, v + 70));
+                const fx = cueFxColor(CUES[cueIdx[player]]);
+                sinks.push({b, x: b.x, y: b.y, px: p.x, py: p.y, t: 0, dur: 34, col: fx});
+                const c = fx;
                 for (let i = 0; i < 10; i++) {
                     const a = Math.random() * TAU, v = .6 + Math.random() * 1.6;
                     parts.push({x: p.x, y: p.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0, max: 24 + Math.random() * 14, col: c, r: 1 + Math.random() * 1.6});
                 }
-                parts.push({ring: true, x: p.x, y: p.y, life: 0, max: 26, r: p.r});
+                parts.push({ring: true, x: p.x, y: p.y, life: 0, max: 30, r: p.r, col: c});
             }
 
             function pot(b) {
@@ -2290,11 +2322,13 @@
                         if (!b.on)
                             continue;
                         const dx = b.x - a.x, dy = b.y - a.y, d2 = dx * dx + dy * dy, min = 2 * R;
-                        if (d2 >= min * min || d2 === 0)
+                        if (d2 >= min * min)
                             continue;
                         if (firstHit === null && (a === cue || b === cue))
                             firstHit = (a === cue ? b : a).n;
-                        const d = Math.sqrt(d2), nx = dx / d, ny = dy / d, ov = (min - d) / 2;
+                        const d = Math.sqrt(d2) || .001;
+                        const angle = d2 ? 0 : (((a.n + 1) * 31 + (b.n + 1) * 17) % 360) * Math.PI / 180;
+                        const nx = d2 ? dx / d : Math.cos(angle), ny = d2 ? dy / d : Math.sin(angle), ov = (min - d) / 2;
                         a.x -= nx * ov;
                         a.y -= ny * ov;
                         b.x += nx * ov;
@@ -2312,7 +2346,7 @@
                                     uy = c.vy / s0;
                                 }
                             }
-                            const e = clamp(BALL_REST - .004 * dvn, .88, BALL_REST);
+                            const e = clamp(BALL_REST - .004 * dvn, .82, BALL_REST);
                             const imp = dvn * (1 + e) / 2;
                             a.vx -= imp * nx;
                             a.vy -= imp * ny;
@@ -2366,8 +2400,11 @@
                     b.vy = s.ny * nvn + s.ty * vt;
                     if (sp > .5)
                         SFX.rail(sp);
-                    if (firstHit !== null)
+                    if (firstHit !== null) {
                         railHit = true;
+                        if (b !== cue)
+                            shotBanks.add(b.n);
+                    }
                 }
                 // Hocicos / nudillos de las troneras
                 const m = R + KR;
@@ -2387,25 +2424,32 @@
                     b.vy *= .97;
                     if (-vn > .5)
                         SFX.jaw(-vn);
-                    if (firstHit !== null)
+                    if (firstHit !== null) {
                         railHit = true;
+                        if (b !== cue)
+                            shotBanks.add(b.n);
+                    }
                 }
             }
 
             // Tronera: la bola cae cuando su centro entra en la boca; cerca de ella es atraída suavemente
-            function checkPot(b) {
+            function checkPot(b, fromX = b.x, fromY = b.y) {
+                const vx = b.x - fromX, vy = b.y - fromY, len2 = vx * vx + vy * vy;
                 for (const p of POCKETS) {
-                    const dx = p.x - b.x, dy = p.y - b.y, d = Math.hypot(dx, dy);
-                    if (d < p.r) {
+                    const t = len2 ? clamp(((p.x - fromX) * vx + (p.y - fromY) * vy) / len2, 0, 1) : 1;
+                    const dx = p.x - (fromX + vx * t), dy = p.y - (fromY + vy * t);
+                    if (dx * dx + dy * dy < p.r * p.r) {
                         pot(b);
                         return;
                     }
-                    if (d < p.r + 8 && d > 0) {
-                        b.vx += dx / d * .01;
-                        b.vy += dy / d * .01;
+                    const near = Math.hypot(p.x - b.x, p.y - b.y);
+                    if (near < p.r + 12 && near > 0) {
+                        const pull = .035 * (1 - near / (p.r + 12));
+                        b.vx += (p.x - b.x) / near * pull;
+                        b.vy += (p.y - b.y) / near * pull;
                     }
                 }
-                if (b.x < X0 - 3 || b.x > X1 + 3 || b.y < Y0 - 3 || b.y > Y1 + 3)
+                if (b.x < X0 - R || b.x > X1 + R || b.y < Y0 - R || b.y > Y1 + R)
                     pot(b);
             }
 
@@ -2491,12 +2535,79 @@
                         : again ? `¡Bien! ${pn(me)} sigue tirando.` : `Turno de ${pn(player)}.`);
             }
 
+            function endTurnVariants() {
+                const me = player, opp = 1 - me;
+                let foul = '';
+                if (cuePending) {
+                    placeAt(cue, X0 + 225, MIDY);
+                    cuePending = false;
+                    foul = 'metió la blanca en una tronera';
+                } else if (firstHit === null)
+                    foul = 'la blanca no tocó ninguna bola';
+                else if (lowFirstMode() && firstHit !== lowBefore)
+                    foul = 'debía tocar primero la bola ' + lowBefore;
+                else if (mode === 16 && !shotPots.some(b => shotBanks.has(b.n)))
+                    foul = 'ninguna bola embocada tocó banda antes de caer';
+                else if (!shotPots.length && !railHit)
+                    foul = 'ninguna bola tocó banda tras el contacto';
+
+                if (mode === 16) {
+                    const unbanked = shotPots.filter(b => !shotBanks.has(b.n));
+                    for (const b of unbanked) {
+                        potted = potted.filter(x => x !== b);
+                        shotPots = shotPots.filter(x => x !== b);
+                        b.tray = false;
+                        placeAt(b, X0 + 675, MIDY);
+                    }
+                }
+                if (!foul && (mode === 14 || mode === 16))
+                    modeScores[me] += mode === 14 ? shotPots.length : shotPots.filter(b => shotBanks.has(b.n)).length;
+                if (!foul && mode === 15)
+                    modeScores[me] += shotPots.reduce((sum, b) => sum + b.n, 0);
+
+                if (mode === 7 || mode === 10) {
+                    const targetBall = shotPots.find(b => b.n === mode);
+                    if (targetBall) {
+                        if (foul) {
+                            potted = potted.filter(b => b !== targetBall);
+                            shotPots = shotPots.filter(b => b !== targetBall);
+                            targetBall.tray = false;
+                            placeAt(targetBall, X0 + 675, MIDY);
+                        } else {
+                            gameOver = true;
+                            winner = me;
+                        }
+                    }
+                } else if (!foul && mode === 14 && modeScores[me] >= 8) {
+                    gameOver = true;
+                    winner = me;
+                } else if (!foul && mode === 15 && modeScores[me] >= 61) {
+                    gameOver = true;
+                    winner = me;
+                } else if (!foul && mode === 16 && modeScores[me] >= 5) {
+                    gameOver = true;
+                    winner = me;
+                }
+                if (gameOver) {
+                    say('🏆 ¡Gana ' + pn(winner) + '! ' + MODE_NAMES[mode] + '.');
+                    return;
+                }
+                const scored = mode === 16 ? shotPots.some(b => shotBanks.has(b.n)) : shotPots.length > 0;
+                if (foul || !scored)
+                    player = opp;
+                inHand = !!foul;
+                say(foul ? 'Falta de ' + pn(me) + ': ' + foul + '. ' + pn(opp) + ': ' + (isBot(opp) ? 'la computadora coloca la blanca.' : 'haz clic para colocar la blanca donde quieras.')
+                    : scored ? '¡Bien! ' + pn(me) + ' sigue tirando · ' + modeScores[me] + ' puntos.' : 'Turno de ' + pn(player) + '.');
+            }
+
             function endTurn() {
                 trailCol = null;
-                if (mode === 9)
+                if (mode === 8)
+                    endTurn8();
+                else if (mode === 9)
                     endTurn9();
                 else
-                    endTurn8();
+                    endTurnVariants();
                 breakShot = false;
                 hud();
                 if (gameOver) {
@@ -2530,6 +2641,8 @@
                 for (let s = 0; s < SUB; s++) {
                     for (const b of balls)
                         if (b.on) {
+                            b.px = b.x;
+                            b.py = b.y;
                             b.x += b.vx / SUB;
                             b.y += b.vy / SUB;
                         }
@@ -2538,13 +2651,12 @@
                     for (const b of balls)
                         if (b.on) {
                             collideCushions(b);
-                            checkPot(b);
+                            checkPot(b, b.px ?? b.x, b.py ?? b.y);
                         }
                 }
                 // estela de fuego del taco premium
-                if (trailCol && cue.on && Math.hypot(cue.vx, cue.vy) > 1 && parts.length < 400)
-                    for (let i = 0; i < 3; i++)
-                        parts.push({x: cue.x + (Math.random() - .5) * 6, y: cue.y + (Math.random() - .5) * 6, vx: (Math.random() - .5) * .8, vy: (Math.random() - .5) * .8 - .2, life: 0, max: 16 + Math.random() * 14, col: trailCol, r: 1.6 + Math.random() * 2.2});
+                if (trailCol && cue.on && Math.hypot(cue.vx, cue.vy) > 1 && parts.length < 150 && (++trailTick % 2 === 0))
+                    parts.push({x: cue.x + (Math.random() - .5) * 6, y: cue.y + (Math.random() - .5) * 6, vx: (Math.random() - .5) * .8, vy: (Math.random() - .5) * .8 - .2, life: 0, max: 13 + Math.random() * 10, col: trailCol, r: 1.2 + Math.random() * 1.8});
                 if (!balls.some(b => b.on && (b.vx || b.vy)) && !sinks.length) {
                     busy = false;
                     endTurn();
@@ -2596,17 +2708,19 @@
                 firstHit = null;
                 railHit = false;
                 shotPots = [];
+                shotBanks = new Set();
                 leftBefore = groups[player] ? left(groups[player]) : 99;
                 lowBefore = lowest();
                 busy = true;
                 SFX.cue(power);
-                const d = CUES[cueIdx[player]];
-                trailCol = d.trail ? d.trail : null;
-                if (trailCol)
-                    for (let i = 0; i < 28; i++) {
-                        const an = Math.random() * TAU, v = .5 + Math.random() * 2.2;
-                        parts.push({x: cue.x, y: cue.y, vx: Math.cos(an) * v, vy: Math.sin(an) * v, life: 0, max: 20 + Math.random() * 16, col: trailCol, r: 1.5 + Math.random() * 2});
-                    }
+                const d = CUES[cueIdx[player]], fx = cueFxColor(d);
+                trailCol = fx;
+                trailTick = 0;
+                for (let i = 0; i < 12; i++) {
+                    const an = Math.random() * TAU, v = .45 + Math.random() * 1.8;
+                    parts.push({x: cue.x, y: cue.y, vx: Math.cos(an) * v, vy: Math.sin(an) * v, life: 0, max: 12 + Math.random() * 10, col: fx, r: 1 + Math.random() * 1.8});
+                }
+                parts.push({ring: true, x: cue.x, y: cue.y, life: 0, max: 18, r: R * .8, col: fx});
                 say(isBot(player) ? 'La computadora tiró…' : 'Bolas en movimiento…');
             }
 
@@ -2677,7 +2791,9 @@
                 return !balls.some(b => b.on && b !== i1 && b !== i2 && segDist(b.x, b.y, x0, y0, x1, y1) < 2 * R - 1);
             }
             function legalTargets() {
-                if (mode === 9) {
+                if (mode === 14 || mode === 16)
+                    return balls.filter(b => b.on && b.n);
+                if (mode === 9 || mode === 7 || mode === 10 || mode === 15) {
                     const l = lowest();
                     return balls.filter(b => b.on && b.n === l);
                 }
@@ -3085,7 +3201,7 @@
             $('backFromPlayers').addEventListener('click', () => show('menu'));
             $('toCues').addEventListener('click', () => cueScreen(0));
 
-            // Selección de taco: 100 diseños + el exclusivo (solo MILTON)
+            // Selección de taco: 100 diseños regulares y 3 exclusivos
             const cards = [], pv = [];
             function drawPrev(p, t) {
                 const g = p.g;
@@ -3100,7 +3216,7 @@
             const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => {
                     en.target._p.vis = en.isIntersecting;
                 }), {root: $('cgrid')}) : null;
-            const order = [HUTAO];
+            const order = [HUTAO, JOSE_CUE, MARLON_CUE];
             for (let i = 0; i < HUTAO; i++)
                 order.push(i);
             order.forEach(i => {
@@ -3148,7 +3264,7 @@
                     sprites[step] = buildSprite(CUES[cueIdx[step]]);
                 }
                 $('cueTitle').textContent = `🎯 ${names[step]}: elige tu taco`;
-                $('cueSub').textContent = step === 0 ? '101 diseños con efectos animados (✨) · el taco Hu Tao es exclusivo de MILTON'
+                $('cueSub').textContent = step === 0 ? '103 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra Carmesí: MARLON'
                         : `${names[0]} eligió: ${CUES[cueIdx[0]].n} · ahora elige ${names[1]}`;
                 $('cueNext').textContent = (step === 0 && !vsCpu) ? `Siguiente: ${names[1]} →` : 'Elegir mesa →';
                 cards.forEach((c, k) => {
@@ -3279,6 +3395,13 @@
                     ctx.beginPath();
                     ctx.arc(x, y, R * sc, 0, TAU);
                     ctx.fill();
+                    ctx.globalCompositeOperation = 'lighter';
+                    ctx.globalAlpha = al * .5;
+                    ctx.strokeStyle = 'rgba(' + s.col[0] + ',' + s.col[1] + ',' + s.col[2] + ',.85)';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.arc(x, y, R * (1.15 + .45 * u), 0, TAU);
+                    ctx.stroke();
                     ctx.restore();
                 }
                 if (!parts.length)
@@ -3288,7 +3411,8 @@
                 for (const q of parts) {
                     const k = 1 - q.life / q.max;
                     if (q.ring) {
-                        ctx.strokeStyle = `rgba(255,255,255,${k * .55})`;
+                        const col = q.col || [255, 255, 255];
+                        ctx.strokeStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (k * .65) + ')';
                         ctx.lineWidth = 2 * k + .5;
                         ctx.beginPath();
                         ctx.arc(q.x, q.y, q.r + (1 - k) * 16, 0, TAU);
@@ -3356,6 +3480,13 @@
 
             let last = performance.now(), acc = 0, lastPrev = 0;
             function loop(t) {
+                if (document.hidden) {
+                    last = t;
+                    acc = 0;
+                    SFX.roll(0);
+                    requestAnimationFrame(loop);
+                    return;
+                }
                 acc += Math.min(t - last, 100);
                 last = t;
                 while (acc >= STEP) {
@@ -3382,7 +3513,6 @@
              ============================================================ */
             const TRACKS = ['KtIazn8SsNM', 'n7QlUH0zrPg', '5cglnHp1mmo', 'jkHqqtfzN7Q', '122WTzQyC5c', 'cmdAqq5tkUA'];
             let track = 0, ytErrors = 0;
-            const BG_ID = 'QroDTillL3U';
             const $music = $('music');
             let yt = null, ytReady = false, musicOn = false;
 
@@ -3412,20 +3542,6 @@
             });
 
             window.onYouTubeIframeAPIReady = () => {
-                new YT.Player('bg', {
-                    videoId: BG_ID,
-                    playerVars: {autoplay: 1, mute: 1, controls: 0, loop: 1, playlist: BG_ID, playsinline: 1, rel: 0, disablekb: 1, modestbranding: 1},
-                    events: {
-                        onReady: e => {
-                            e.target.mute();
-                            e.target.playVideo();
-                        },
-                        onStateChange: e => {
-                            if (e.data === YT.PlayerState.ENDED)
-                                e.target.playVideo();
-                        }
-                    }
-                });
                 yt = new YT.Player('yt', {
                     width: '200', height: '200', videoId: TRACKS[0],
                     playerVars: {controls: 0, playsinline: 1, rel: 0},
