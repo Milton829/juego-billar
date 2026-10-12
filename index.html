@@ -801,7 +801,7 @@
         <div class="screen" id="tables">
             <div class="panel">
                 <h2>🎨 Elige la mesa</h2>
-                <p class="sub">6 diseños · la última (✨) es la exclusiva de Don Pío</p>
+                <p class="sub">7 diseños · Don Pío conserva su mesa exclusiva</p>
                 <div class="tgrid" id="tgrid"></div>
                 <div class="actions">
                     <button class="dark" id="backCues">← Atrás</button>
@@ -846,8 +846,8 @@
             const MAX_SPEED = 20, MAX_PULL = 160;
             const STEP = 1000 / 120;
             const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
-            const NAMES_L = ['HAROLD', 'JOSE', 'MILTON', 'ANDERSON'];
-            const NAMES_R = ['MARLON', 'PEDRO', 'OJONA'];
+            const NAMES_L = ['HAROLD', 'JOSE', 'MILTON', 'ANDERSON', 'KAORY'];
+            const NAMES_R = ['MARLON', 'PEDRO', 'PAOLO', 'SILERY'];
             const ALL_NAMES = [...NAMES_L, ...NAMES_R];
             const BOT_NAME = 'COMPUTADORA';
             const DIFF_LABEL = {facil: 'Fácil', normal: 'Normal', dificil: 'Difícil'};
@@ -875,7 +875,7 @@
             KNUCKLES.push({x: s.bx, y: s.by});
             });
             /* ============================================================
-             DISEÑOS DE TACO (100 + 1 exclusivo)
+             DISEÑOS DE TACO (100 regulares + 8 exclusivos)
              s = degradado (punta → base) · k/k2 = decoración · a/b = colores · t = punta · g = gemas
              fx = lista de efectos animados · fc/fc2/fc3 = colores del efecto · fh = tonos de la llama
              ph = tonos del plasma · ec = color del rayo · sc = humo (r,g,b)
@@ -994,7 +994,7 @@
                     s: ['#fff2d0', '#ff7a2a', '#c4121f', '#4a0606', '#0a0202'],
                     k: 'flamepaint', a: '#ffcf5a', k2: 'gems', g: ['#ff2b2b', '#ffcf5a', '#ffffff'],
                     t: '#ffcf5a',
-                    fx: ['aura', 'smoke', 'flame', 'ghostfire', 'runering', 'butterflies', 'embers', 'orbit', 'shine', 'pulse', 'spark', 'tipflare'],
+                    fx: ['aura', 'smoke', 'flame', 'ghostfire', 'runering', 'butterflies', 'embers', 'orbit', 'shine', 'pulse', 'spark', 'tipflare', 'wave'],
                     fh: [24, 0], sc: '70,10,10', fc: '#ff5a2a', fc2: '#ffcf5a', fc3: '#d8a0ff'
             });
             const JOSE_CUE = CUES.length;
@@ -1009,7 +1009,7 @@
             n: 'Sombra de Acero · MARLON', ex: 'MARLON',
                     s: ['#aeb4bd', '#454a52', '#171a20', '#050608'],
                     k: 'scales', a: '#d2d6dc', k2: 'gems', g: ['#d7dbe2', '#6f7783'],
-                    fx: ['aura', 'smoke', 'electric', 'pulse', 'orbit'], fc: '#aeb7c2', fc2: '#e1e5eb'
+                    fx: ['aura', 'shine', 'spark', 'flame', 'embers', 'smoke','ice', 'orbit', 'pulse', 'plasma', 'rainbow', 'electric','comet', 'galaxy', 'bubbles', 'hearts', 'petals', 'matrix','glitch', 'wave', 'ghostfire', 'butterflies', 'runering', 'tipflare'], fc: '#aeb7c2', fc2: '#e1e5eb'
             });
             const PEDRO_CUE = CUES.length;
             CUES.push({
@@ -1023,7 +1023,7 @@
             n: 'Eclipse Boreal · HAROLD', ex: 'HAROLD',
                     s: ['#f5edff', '#8f65ff', '#2b185c', '#070412'],
                     k: 'spiral', a: '#e9dcff', k2: 'stars', a2: '#a6f2ff', b2: '#ffffff',
-                    fx: ['aura', 'galaxy', 'comet', 'orbit', 'spark', 'pulse'],
+                    fx: ['aura', 'galaxy', 'comet', 'orbit', 'spark', 'pulse', 'matrix','glitch'],
                     fc: '#b281ff', fc2: '#9fe3ff'
             });
             const ANDERSON_CUE = CUES.length;
@@ -1034,11 +1034,29 @@
                     a: '#ff0000',
                     k2: 'gems',
                     g: ['#ff0000', '#8b0000', '#000000'],
-                    fx: ['aura', 'shine', 'electric', 'embers', 'tipflare', 'orbit', 'shine', 'pulse', ],
+                    fx: ['aura', 'shine', 'electric', 'embers', 'tipflare', 'orbit', 'shine', 'pulse','matrix'],
                     fc: '#ff0000',
                     fc2: '#660000',
                     ec: '#ff3333'
                     });
+            const KAORY_CUE = CUES.length;
+            CUES.push({
+            n: 'Noche de Guinda · KAORY', ex: 'KAORY', trail: [139, 25, 61], rollFx: 'ring',
+                    s: ['#050609', '#17151b', '#3d1024', '#741a3c', '#09080b'],
+                    k: 'runes', a: '#ead8dc', k2: 'rings', a2: '#842044', b2: '#d5b27b',
+                    fx: ['aura', 'shine', 'embers', 'orbit', 'pulse', 'spark', 'tipflare', 'runering', 'wave'],
+                    fc: '#8b193d', fc2: '#eed8df', fc3: '#d5b27b'
+            });
+            const SILERY_CUE = CUES.length;
+            CUES.push({
+            n: 'Jardín de Rosa · SILERY', ex: 'SILERY', trail: [255, 105, 170], rollFx: 'hearts',
+                    s: ['#fffaff', '#ffe4ef', '#ff9fc6', '#e45b98', '#fffaff'],
+                    k: 'gems', a: '#ffffff', g: ['#ffffff', '#ffd4e6', '#ff85b5'],
+                    k2: 'rings', a2: '#fff5fa', b2: '#ffc2dc',
+                    fx: ['aura', 'smoke', 'ghostfire', 'runering', 'butterflies', 'embers', 'orbit', 'shine','pulse', 'spark', 'tipflare','shine'],
+                    fc: '#ff69a6', fc2: '#fff4fa'                   
+            });
+            
             CUES.forEach(d => {
             d.fxl = d.fx ? [].concat(d.fx) : [];
             });
@@ -1865,7 +1883,7 @@
             let spinOn = false, spinX = 0, spinY = 0;
             let aimOn = true;
             let sfxOn = true;
-            let names = [ALL_NAMES[0], ALL_NAMES[4]];
+            let names = [ALL_NAMES[0], ALL_NAMES[NAMES_L.length]];
             let cueIdx = [0, 1], sprites = [null, null], cueStep = 0;
             let sinks = [], parts = [], maxV = 0, trailCol = null, trailTick = 0;
             let shotBanks = new Set();
@@ -1878,8 +1896,9 @@
             const pr = JSON.parse(localStorage.getItem('donpio_prefs') || '{}');
             if (MODE_NAMES[pr.mode])
                     mode = pr.mode;
-            if (Array.isArray(pr.names) && pr.names.length === 2 && pr.names.every(n => ALL_NAMES.includes(n)) && pr.names[0] !== pr.names[1])
-                    names = pr.names.slice();
+            const savedNames = Array.isArray(pr.names) ? pr.names.map(n => n === 'OJONA' ? 'PAOLO' : n) : null;
+            if (savedNames && savedNames.length === 2 && savedNames.every(n => ALL_NAMES.includes(n)) && savedNames[0] !== savedNames[1])
+                    names = savedNames;
             if (Array.isArray(pr.cues))
                     pr.cues.slice(0, 2).forEach((v, i) => {
             if (Number.isInteger(v) && v >= 0 && v < CUES.length && cueAllowed(v, names[i]))
@@ -1893,7 +1912,7 @@
             vsCpu = !!pr.cpu;
             if (DIFF_LABEL[pr.diff])
                     diff = pr.diff;
-            if (Number.isInteger(pr.table) && pr.table >= 0 && pr.table < 6)
+            if (Number.isInteger(pr.table) && pr.table >= 0 && pr.table < 7)
                     tableIdx = pr.table;
             } catch (e) {
             }
@@ -1908,6 +1927,10 @@
             try {
             scores = JSON.parse(localStorage.getItem('donpio_scores') || '{}') || {};
             } catch (e) {
+            }
+            if (Object.prototype.hasOwnProperty.call(scores, 'OJONA')) {
+            scores.PAOLO = (+ scores.PAOLO || 0) + (+ scores.OJONA || 0);
+            delete scores.OJONA;
             }
             ALL_NAMES.forEach(n => {
             scores[n] = + scores[n] || 0;
@@ -2384,7 +2407,7 @@
             }
 
             /* ============================================================
-             MESAS: 6 diseños (la 1.ª copia el modelo azul de tu referencia · la 6.ª es la exclusiva Don Pío)
+             MESAS: 7 diseños (la 1.ª copia el modelo azul de tu referencia · la 6.ª es la exclusiva Don Pío)
              felt = [centro, borde] · cush = [exterior, interior] · rail = [arriba, abajo]
              ============================================================ */
             const TABLES = [
@@ -2393,7 +2416,8 @@
             {n: 'Rojo Casino', felt: ['#d4262e', '#7d1016'], cush: ['#4a0a10', '#b02028'], rail: ['#5a2418', '#1c0806'], railHi: 'rgba(255,215,140,.22)', sight: '#ffd24a', grain: true, prim: ['#8a5a20', '#2a160a', '#0a0402'], spot: 'rgba(255,230,160,.4)'},
             {n: 'Púrpura Real', felt: ['#8a44d6', '#431a78'], cush: ['#2a0f4a', '#6a30b4'], rail: ['#1d1226', '#07040c'], railHi: 'rgba(240,200,80,.3)', sight: '#f2c230', dots: true, prim: ['#8a6a20', '#2a1a40', '#07040c'], spot: 'rgba(255,230,160,.4)'},
             {n: 'Gris Torneo', felt: ['#8896a4', '#4a5662'], cush: ['#2e3842', '#6e7d8c'], rail: ['#d2d9e1', '#6b7684'], railHi: 'rgba(255,255,255,.55)', sight: '#14181d', dots: true, prim: ['#8a919a', '#3a3f46', '#0c0e10'], spot: 'rgba(255,255,255,.35)'},
-            {n: 'Don Pío · Exclusiva', ex: true, felt: ['#111113', '#080809'], cush: ['#050505', '#171719'], rail: ['#141416', '#000000'], railHi: 'rgba(255,255,255,.055)', trim: '#743014', sight: '#a84c22', dots: true, logo: true, prim: ['#8a421c', '#160d08', '#000000'], spot: 'rgba(190,94,48,.24)'}
+            {n: 'Don Pío · Exclusiva', ex: true, felt: ['#111113', '#080809'], cush: ['#050505', '#171719'], rail: ['#141416', '#000000'], railHi: 'rgba(255,255,255,.055)', trim: '#743014', sight: '#a84c22', dots: true, logo: true, prim: ['#8a421c', '#160d08', '#000000'], spot: 'rgba(190,94,48,.24)'},
+            {n: 'Medianoche Negra', felt: ['#17191e', '#08090c'], cush: ['#0b0c10', '#17191f'], rail: ['#262831', '#08090d'], railHi: 'rgba(230,235,255,.12)', trim: '#5b6070', sight: '#d8dbe5', dots: true, prim: ['#535762', '#20232b', '#08090d'], spot: 'rgba(220,225,245,.22)'}
             ];
             const tableCache = {};
             function getTable(i) {
@@ -2781,11 +2805,32 @@
             const fx = cueFxColor(CUES[cueIdx[player]]);
             sinks.push({b, x: b.x, y: b.y, px: p.x, py: p.y, t: 0, dur: 34, col: fx});
             const c = fx;
-            for (let i = 0; i < 10; i++) {
+            const d = CUES[cueIdx[player]], exclusive = !!d.ex, count = exclusive ? 18 : 10;
+            for (let i = 0; i < count; i++) {
             const a = Math.random() * TAU, v = .6 + Math.random() * 1.6;
-            parts.push({x: p.x, y: p.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0, max: 24 + Math.random() * 14, col: c, r: 1 + Math.random() * 1.6});
+            const part = {x: p.x, y: p.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0, max: 24 + Math.random() * 14, col: c, r: 1 + Math.random() * 1.6};
+            if (d.rollFx === 'hearts' && i % 2 === 0)
+                    part.heart = true;
+            parts.push(part);
             }
             parts.push({ring: true, x: p.x, y: p.y, life: 0, max: 30, r: p.r, col: c});
+            if (exclusive)
+                    parts.push({ring: true, x: p.x, y: p.y, life: 0, max: 40, r: p.r * 1.42, col: c});
+
+            // Explosión universal al embocar: destellos blancos y dorados para cualquier taco.
+            for (let i = 0; i < 16; i++) {
+            const a = TAU * i / 16 + (Math.random() - .5) * .18;
+            const v = 1.15 + Math.random() * 2.5;
+            parts.push({
+            x: p.x, y: p.y,
+            vx: Math.cos(a) * v, vy: Math.sin(a) * v,
+            life: 0, max: 18 + Math.random() * 13,
+            col: i % 2 ? [255, 255, 255] : [255, 213, 120],
+            r: 1.8 + Math.random() * 2.2
+            });
+            }
+            parts.push({ring: true, x: p.x, y: p.y, life: 0, max: 25, r: p.r * .55, col: [255, 255, 255]});
+            parts.push({ring: true, x: p.x, y: p.y, life: 0, max: 34, r: p.r * .9, col: [255, 213, 120]});
             }
 
             function pot(b) {
@@ -3223,11 +3268,17 @@
             const d = CUES[cueIdx[player]], fx = cueFxColor(d);
             trailCol = fx;
             trailTick = 0;
-            for (let i = 0; i < 12; i++) {
+            const burstCount = d.ex ? 22 : 12;
+            for (let i = 0; i < burstCount; i++) {
             const an = Math.random() * TAU, v = .45 + Math.random() * 1.8;
-            parts.push({x: cue.x, y: cue.y, vx: Math.cos(an) * v, vy: Math.sin(an) * v, life: 0, max: 12 + Math.random() * 10, col: fx, r: 1 + Math.random() * 1.8});
+            const part = {x: cue.x, y: cue.y, vx: Math.cos(an) * v, vy: Math.sin(an) * v, life: 0, max: 12 + Math.random() * 10, col: fx, r: 1 + Math.random() * 1.8};
+            if (d.rollFx === 'hearts' && i % 3 === 0)
+                    part.heart = true;
+            parts.push(part);
             }
-            parts.push({ring: true, x: cue.x, y: cue.y, life: 0, max: 18, r: R * .8, col: fx});
+            parts.push({ring: true, x: cue.x, y: cue.y, life: 0, max: d.ex ? 26 : 18, r: R * (d.ex ? 1.05 : .8), col: fx});
+            if (d.ex)
+                    parts.push({ring: true, x: cue.x, y: cue.y, life: 0, max: 32, r: R * 1.7, col: fx});
             say(isBot(player) ? 'La computadora tiró…' : 'Bolas en movimiento…');
             }
 
@@ -3809,7 +3860,7 @@
             const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => {
             en.target._p.vis = en.isIntersecting;
             }), {root: $('cgrid')}) : null;
-            const order = [HUTAO, JOSE_CUE, MARLON_CUE, PEDRO_CUE, HAROLD_CUE, ANDERSON_CUE];
+            const order = [HUTAO, JOSE_CUE, MARLON_CUE, PEDRO_CUE, HAROLD_CUE, ANDERSON_CUE, KAORY_CUE, SILERY_CUE];
             for (let i = 0; i < HUTAO; i++)
                     order.push(i);
             order.forEach(i => {
@@ -3857,7 +3908,7 @@
             sprites[step] = buildSprite(CUES[cueIdx[step]]);
             }
             $('cueTitle').textContent = `🎯 ${names[step]}: elige tu taco`;
-            $('cueSub').textContent = step === 0 ? '106 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra de Acero: MARLON · Centinela Jade: PEDRO · Eclipse Boreal: HAROLD · León Solar: ANDERSON'
+            $('cueSub').textContent = step === 0 ? '108 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra de Acero: MARLON · Centinela Jade: PEDRO · Eclipse Boreal: HAROLD · León Rojo: ANDERSON · Noche de Guinda: KAORY · Jardín de Rosa: SILERY'
                     : `${names[0]} eligió: ${CUES[cueIdx[0]].n} · ahora elige ${names[1]}`;
             $('cueNext').textContent = (step === 0 && !vsCpu) ? `Siguiente: ${names[1]} →` : 'Elegir mesa →';
             cards.forEach((c, k) => {
@@ -4007,11 +4058,50 @@
             ctx.beginPath();
             ctx.arc(q.x, q.y, q.r + (1 - k) * 16, 0, TAU);
             ctx.stroke();
+            } else if (q.heart) {
+            ctx.fillStyle = `rgba(${q.col[0]},${q.col[1]},${q.col[2]},${k})`;
+            heart(ctx, q.x, q.y, q.r * (.9 + k * .6));
             } else {
             ctx.fillStyle = `rgba(${q.col[0]},${q.col[1]},${q.col[2]},${k})`;
             ctx.beginPath();
             ctx.arc(q.x, q.y, q.r * (.5 + k), 0, TAU);
             ctx.fill();
+            }
+            }
+            ctx.restore();
+            }
+
+            function drawRollingAura(b) {
+            const d = CUES[cueIdx[player]];
+            if (!busy || !d.ex || !b.on)
+                    return;
+            const speed = Math.hypot(b.vx, b.vy);
+            if (speed < MIN_V)
+                    return;
+            const color = cueFxColor(d), rgba = `rgba(${color[0]},${color[1]},${color[2]},`;
+            const t = performance.now() / 1000, pulse = .5 + .5 * Math.sin(t * 8 + b.n);
+            const radius = R + 3 + pulse * 2.5;
+            ctx.save();
+            ctx.globalCompositeOperation = 'lighter';
+            ctx.globalAlpha = Math.min(.78, .24 + speed / MAX_SPEED * .5);
+            ctx.shadowColor = rgba + '.9)';
+            ctx.shadowBlur = 8 + pulse * 8;
+            ctx.strokeStyle = rgba + '.8)';
+            ctx.lineWidth = 1.2 + pulse * 1.1;
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, radius, 0, TAU);
+            ctx.stroke();
+            ctx.globalAlpha *= .45;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, radius + 3 + pulse * 2, 0, TAU);
+            ctx.stroke();
+            if (d.rollFx === 'hearts') {
+            ctx.shadowBlur = 5;
+            ctx.fillStyle = rgba + '.95)';
+            for (let i = 0; i < 4; i++) {
+            const a = t * 2.5 + i * TAU / 4 + b.n * .2;
+            heart(ctx, b.x + Math.cos(a) * (radius + 3), b.y + Math.sin(a) * (radius + 3), 2.4 + pulse * .6);
             }
             }
             ctx.restore();
@@ -4034,6 +4124,7 @@
             ctx.fill();
             for (const b of balls)
                     if (b.on) {
+            drawRollingAura(b);
             if (b.dirty)
                     renderBall(b);
             ctx.drawImage(b.cv, b.x - SS / 2, b.y - SS / 2, SS, SS);
