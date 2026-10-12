@@ -346,11 +346,11 @@
             /* ---------- Geometría de la mesa: bandas, hocicos (jaws) y troneras ----------
                Las bandas son segmentos entre troneras; los extremos son "nudillos" redondeados que
                hacen rebotar la bola cuando entra mal en la boca de la tronera. */
-            const CG = 30, MG = 30, KR = 3.5;      // hueco de esquina · medio hueco central · radio del nudillo
+            const CG = 28, MG = 28, KR = 3.6;      // bocas de tronera proporcionadas al diametro de bola
             const POCKETS = [
-                {x: X0 - 5, y: Y0 - 2, r: 18}, {x: X1 + 3, y: Y0 - 3, r: 18},
-                {x: X0 - 5, y: Y1 + 5, r: 18}, {x: X1 + 3, y: Y1 + 3, r: 18},
-                {x: MIDX, y: Y0 - 5, r: 16}, {x: MIDX, y: Y1 + 3, r: 16}
+                {x: X0 - 4, y: Y0 - 4, r: 15}, {x: X1 + 4, y: Y0 - 4, r: 15},
+                {x: X0 - 4, y: Y1 + 4, r: 15}, {x: X1 + 4, y: Y1 + 4, r: 15},
+                {x: MIDX, y: Y0 - 4, r: 14}, {x: MIDX, y: Y1 + 4, r: 14}
             ];
             const mkSeg = (ax, ay, bx, by, nx, ny) => {
                 const len = Math.hypot(bx - ax, by - ay);
@@ -503,6 +503,13 @@
                 s: ['#aeb4bd', '#454a52', '#171a20', '#050608'],
                 k: 'scales', a: '#d2d6dc', k2: 'gems', g: ['#d7dbe2', '#6f7783'],
                 fx: ['aura', 'smoke', 'electric', 'pulse', 'orbit'], fc: '#aeb7c2', fc2: '#e1e5eb'
+            });
+            const PEDRO_CUE = CUES.length;
+            CUES.push({
+                n: 'Centinela Jade · PEDRO', ex: 'PEDRO',
+                s: ['#e5f5d0', '#38a66a', '#123b2b', '#07140e'],
+                k: 'scales', a: '#dbf4a4', k2: 'rings', a2: '#e2c24b', b2: '#e2c24b',
+                fx: ['aura', 'shine', 'orbit', 'spark', 'pulse'], fc: '#56e091', fc2: '#f0d675'
             });
             CUES.forEach(d => {
                 d.fxl = d.fx ? [].concat(d.fx) : [];
@@ -2066,14 +2073,14 @@
 
                 // Troneras
                 POCKETS.forEach(p => {
-                    const vr = p.r + 2;
-                    let pg = g.createRadialGradient(p.x, p.y, vr * .8, p.x, p.y, vr + 9);
+                    const vr = p.r + 1.5;
+                    let pg = g.createRadialGradient(p.x, p.y, vr * .86, p.x, p.y, vr + 6);
                     pg.addColorStop(0, 'rgba(0,0,0,.9)');
                     pg.addColorStop(.5, 'rgba(0,0,0,.55)');
                     pg.addColorStop(1, 'rgba(0,0,0,0)');
                     g.fillStyle = pg;
                     g.beginPath();
-                    g.arc(p.x, p.y, vr + 9, 0, TAU);
+                    g.arc(p.x, p.y, vr + 6, 0, TAU);
                     g.fill();
                     const rim = g.createLinearGradient(p.x - vr, p.y - vr, p.x + vr, p.y + vr);
                     rim.addColorStop(0, T.prim[0]);
@@ -2081,7 +2088,7 @@
                     rim.addColorStop(1, T.prim[2]);
                     g.fillStyle = rim;
                     g.beginPath();
-                    g.arc(p.x, p.y, vr + 3.2, 0, TAU);
+                    g.arc(p.x, p.y, vr + 2.4, 0, TAU);
                     g.fill();
                     const hg = g.createRadialGradient(p.x - vr * .25, p.y - vr * .3, 1, p.x, p.y, vr);
                     hg.addColorStop(0, '#15110d');
@@ -2829,6 +2836,97 @@
                     }
                 return out.sort((a, b) => b.score - a.score);
             }
+            function evalBankShots(cx, cy) {
+                const out = [];
+                const rails = [
+                    {axis: 'x', at: X0 + R}, {axis: 'x', at: X1 - R},
+                    {axis: 'y', at: Y0 + R}, {axis: 'y', at: Y1 - R}
+                ];
+                for (const t of legalTargets()) {
+                    for (const p of POCKETS) {
+                        for (const rail of rails) {
+                            const ix = rail.axis === 'x' ? 2 * rail.at - p.x : p.x;
+                            const iy = rail.axis === 'y' ? 2 * rail.at - p.y : p.y;
+                            const dx = ix - t.x, dy = iy - t.y;
+                            const den = rail.axis === 'x' ? dx : dy;
+                            if (Math.abs(den) < 1e-6)
+                                continue;
+                            const cross = (rail.at - (rail.axis === 'x' ? t.x : t.y)) / den;
+                            if (cross <= .03 || cross >= .97)
+                                continue;
+                            const bx = t.x + dx * cross, by = t.y + dy * cross;
+                            const onCushion = SEGS.some(s => {
+                                const along = (bx - s.ax) * s.ux + (by - s.ay) * s.uy;
+                                const depth = (bx - s.ax) * s.nx + (by - s.ay) * s.ny;
+                                return along > 3 && along < s.len - 3 && Math.abs(depth - R) < 2.5;
+                            });
+                            if (!onCushion)
+                                continue;
+                            const d1 = Math.hypot(bx - t.x, by - t.y);
+                            const d2 = Math.hypot(p.x - bx, p.y - by);
+                            if (d1 < 1 || d2 < 1)
+                                continue;
+                            const ux = (bx - t.x) / d1, uy = (by - t.y) / d1;
+                            const gx = t.x - ux * 2 * R, gy = t.y - uy * 2 * R;
+                            if (gx < X0 + R || gx > X1 - R || gy < Y0 + R || gy > Y1 - R)
+                                continue;
+                            const vx = gx - cx, vy = gy - cy, dc = Math.hypot(vx, vy);
+                            if (dc < 2)
+                                continue;
+                            const cut = (vx * ux + vy * uy) / dc;
+                            if (cut < .25)
+                                continue;
+                            if (!clearPath(cx, cy, gx, gy, cue, t) ||
+                                !clearPath(t.x, t.y, bx, by, t, cue) ||
+                                !clearPath(bx, by, p.x, p.y, t, cue))
+                                continue;
+                            if (KNUCKLES.some(k =>
+                                segDist(k.x, k.y, t.x, t.y, bx, by) < R + KR - 1 ||
+                                segDist(k.x, k.y, bx, by, p.x, p.y) < R + KR - 1))
+                                continue;
+                            const d = d1 + d2;
+                            out.push({t, p, gx, gy, dc, d, cut, bank: true,
+                                score: cut - (dc + d) / 1900 + .1});
+                        }
+                    }
+                }
+                return out.sort((a, b) => b.score - a.score);
+            }
+            function evalBankSafetyShots(cx, cy) {
+                const out = [];
+                for (const t of legalTargets()) {
+                    for (const s of SEGS) {
+                        for (const f of [.24, .5, .76]) {
+                            const bx = s.ax + s.ux * s.len * f + s.nx * R;
+                            const by = s.ay + s.uy * s.len * f + s.ny * R;
+                            const dx = bx - t.x, dy = by - t.y, d = Math.hypot(dx, dy);
+                            if (d < 2)
+                                continue;
+                            const ux = dx / d, uy = dy / d;
+                            if (ux * s.nx + uy * s.ny > -.08)
+                                continue;
+                            if (POCKETS.some(p => segDist(p.x, p.y, t.x, t.y, bx, by) < p.r + 2))
+                                continue;
+                            if (!clearPath(t.x, t.y, bx, by, t, cue))
+                                continue;
+                            if (KNUCKLES.some(k => segDist(k.x, k.y, t.x, t.y, bx, by) < R + KR - 1))
+                                continue;
+                            const gx = t.x - ux * 2 * R, gy = t.y - uy * 2 * R;
+                            if (gx < X0 + R || gx > X1 - R || gy < Y0 + R || gy > Y1 - R)
+                                continue;
+                            const vx = gx - cx, vy = gy - cy, dc = Math.hypot(vx, vy);
+                            if (dc < 2 || !clearPath(cx, cy, gx, gy, cue, t))
+                                continue;
+                            const cut = (vx * ux + vy * uy) / dc;
+                            if (cut < .18)
+                                continue;
+                            out.push({t, gx, gy, dc, d, cut, bank: false,
+                                score: cut - (dc + d) / 2200});
+                        }
+                    }
+                }
+                return out.sort((a, b) => b.score - a.score);
+            }
             function botPlace() {
                 let best = null, bs = -9;
                 for (let i = 0; i < 70; i++) {
@@ -2859,7 +2957,9 @@
                     a1 = Math.atan2(f.y - cue.y, f.x - cue.x) + (Math.random() - .5) * D.err;
                     v = {facil: 10, normal: 15, dificil: 19}[diff];
                 } else {
-                    const cands = evalShots(cue.x, cue.y);
+                    let cands = mode === 16 ? evalBankShots(cue.x, cue.y) : evalShots(cue.x, cue.y);
+                    if (mode === 16 && !cands.length)
+                        cands = evalBankSafetyShots(cue.x, cue.y);
                     let pick = null;
                     if (cands.length && Math.random() >= D.rand) {
                         if (diff === 'facil')
@@ -3216,7 +3316,7 @@
             const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => {
                     en.target._p.vis = en.isIntersecting;
                 }), {root: $('cgrid')}) : null;
-            const order = [HUTAO, JOSE_CUE, MARLON_CUE];
+            const order = [HUTAO, JOSE_CUE, MARLON_CUE, PEDRO_CUE];
             for (let i = 0; i < HUTAO; i++)
                 order.push(i);
             order.forEach(i => {
@@ -3264,7 +3364,7 @@
                     sprites[step] = buildSprite(CUES[cueIdx[step]]);
                 }
                 $('cueTitle').textContent = `🎯 ${names[step]}: elige tu taco`;
-                $('cueSub').textContent = step === 0 ? '103 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra Carmesí: MARLON'
+                $('cueSub').textContent = step === 0 ? '104 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra de Acero: MARLON · Centinela Jade: PEDRO'
                         : `${names[0]} eligió: ${CUES[cueIdx[0]].n} · ahora elige ${names[1]}`;
                 $('cueNext').textContent = (step === 0 && !vsCpu) ? `Siguiente: ${names[1]} →` : 'Elegir mesa →';
                 cards.forEach((c, k) => {
