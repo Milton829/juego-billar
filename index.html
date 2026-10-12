@@ -1753,7 +1753,7 @@
                     x, y, vx: 0, vy: 0, n, on: true, cv: c, g, img: g.createImageData(N, N), dirty: true, set: SET,
                     tex: n ? numTex(n, SET) : null,
                     col: n ? SET.col[(n - 1) % 8] : SET.cue,
-                    sv: 0, ss: 0,
+                    sv: 0, ss: 0, resting: true,
                     M: T0.slice()
                 };
             }
@@ -1774,52 +1774,51 @@
                     t * ax * ay, t * ay * ay + c, -ax * sn,
                     -ay * sn, ax * sn, c];
                 b.M = mul(Rm, b.M);
+                b.resting = false;
                 b.dirty = true;
             }
 
-            function settleBall(b, k) {
+            // Corrige solo el error numerico acumulado; conserva la orientacion final de la bola.
+            function settleBall(b) {
                 const M = b.M;
-                let e = 0;
-                for (let i = 0; i < 9; i++) {
-                    const dd = M[i] - T0[i];
-                    e += dd * dd;
-                }
-                if (e === 0)
+                let ax = M[0], ay = M[3], az = M[6];
+                let len = Math.hypot(ax, ay, az);
+                if (len < 1e-8)
                     return;
-                const snap = () => {
-                    b.M = T0.slice();
-                    b.dirty = true;
-                };
-                if (e < 4e-5)
-                    return snap();
-                const m = M.map((v, i) => v * (1 - k) + T0[i] * k);
-                let a0 = m[0], a1 = m[1], a2 = m[2], l = Math.hypot(a0, a1, a2);
-                if (l < 1e-3)
-                    return snap();
-                a0 /= l;
-                a1 /= l;
-                a2 /= l;
-                let c0 = m[3], c1 = m[4], c2 = m[5];
-                const dt = c0 * a0 + c1 * a1 + c2 * a2;
-                c0 -= dt * a0;
-                c1 -= dt * a1;
-                c2 -= dt * a2;
-                l = Math.hypot(c0, c1, c2);
-                if (l < 1e-3)
-                    return snap();
-                c0 /= l;
-                c1 /= l;
-                c2 /= l;
-                b.M = [a0, a1, a2, c0, c1, c2, a1 * c2 - a2 * c1, a2 * c0 - a0 * c2, a0 * c1 - a1 * c0];
+                ax /= len;
+                ay /= len;
+                az /= len;
+
+                let bx = M[1], by = M[4], bz = M[7];
+                const projection = ax * bx + ay * by + az * bz;
+                bx -= projection * ax;
+                by -= projection * ay;
+                bz -= projection * az;
+                len = Math.hypot(bx, by, bz);
+                if (len < 1e-8)
+                    return;
+                bx /= len;
+                by /= len;
+                bz /= len;
+
+                const cx = ay * bz - az * by;
+                const cy = az * bx - ax * bz;
+                const cz = ax * by - ay * bx;
+                b.M = [ax, bx, cx, ay, by, cy, az, bz, cz];
                 b.dirty = true;
             }
             function settleAll() {
                 for (const b of balls) {
-                    if (!b.on || !b.n)
+                    if (!b.on)
                         continue;
-                    const s = Math.hypot(b.vx, b.vy);
-                    if (s < 2.4)
-                        settleBall(b, .03 + .09 * (1 - s / 2.4));
+                    if (Math.hypot(b.vx, b.vy) >= MIN_V) {
+                        b.resting = false;
+                        continue;
+                    }
+                    if (b.resting)
+                        continue;
+                    settleBall(b);
+                    b.resting = true;
                 }
             }
 
