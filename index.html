@@ -519,14 +519,19 @@
                 fx: ['aura', 'galaxy', 'comet', 'orbit', 'spark', 'pulse'],
                 fc: '#b281ff', fc2: '#9fe3ff'
             });
-            const ANDERSON_CUE = CUES.length;
-            CUES.push({
-                n: 'León Solar · ANDERSON', ex: 'ANDERSON',
-                s: ['#fff3b0', '#e69b20', '#793716', '#190b12'],
-                k: 'runes', a: '#fff0a8', k2: 'gems', g: ['#ffe08a', '#ff5d42', '#ffffff'],
-                fx: ['aura', 'shine', 'electric', 'embers', 'tipflare', 'rainbow'],
-                fc: '#ffc84b', fc2: '#ff7659', ec: '#fff2b3'
-            });
+const ANDERSON_CUE = CUES.length;
+CUES.push({
+    n: 'León Rojo · ANDERSON', ex: 'ANDERSON',
+    s: ['#ff1a1a', '#b30000', '#330000', '#050505'],
+    k: 'runes',
+    a: '#ff0000',
+    k2: 'gems',
+    g: ['#ff0000', '#8b0000', '#000000'],
+    fx: ['aura', 'shine', 'electric', 'embers', 'tipflare','orbit', 'shine', 'pulse',],
+    fc: '#ff0000',
+    fc2: '#660000',
+    ec: '#ff3333'
+});
             CUES.forEach(d => {
                 d.fxl = d.fx ? [].concat(d.fx) : [];
             });
