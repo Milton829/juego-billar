@@ -337,7 +337,7 @@
             const STEP = 1000 / 120;
             const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
 
-            const NAMES_L = ['HAROL', 'JOSE', 'MILTON', 'ANDERSON'];
+            const NAMES_L = ['HAROLD', 'JOSE', 'MILTON', 'ANDERSON'];
             const NAMES_R = ['MARLON', 'PEDRO', 'OJONA'];
             const ALL_NAMES = [...NAMES_L, ...NAMES_R];
             const BOT_NAME = 'COMPUTADORA';
@@ -510,6 +510,22 @@
                 s: ['#e5f5d0', '#38a66a', '#123b2b', '#07140e'],
                 k: 'scales', a: '#dbf4a4', k2: 'rings', a2: '#e2c24b', b2: '#e2c24b',
                 fx: ['aura', 'shine', 'orbit', 'spark', 'pulse'], fc: '#56e091', fc2: '#f0d675'
+            });
+            const HAROLD_CUE = CUES.length;
+            CUES.push({
+                n: 'Eclipse Boreal · HAROLD', ex: 'HAROLD',
+                s: ['#f5edff', '#8f65ff', '#2b185c', '#070412'],
+                k: 'spiral', a: '#e9dcff', k2: 'stars', a2: '#a6f2ff', b2: '#ffffff',
+                fx: ['aura', 'galaxy', 'comet', 'orbit', 'spark', 'pulse'],
+                fc: '#b281ff', fc2: '#9fe3ff'
+            });
+            const ANDERSON_CUE = CUES.length;
+            CUES.push({
+                n: 'León Solar · ANDERSON', ex: 'ANDERSON',
+                s: ['#fff3b0', '#e69b20', '#793716', '#190b12'],
+                k: 'runes', a: '#fff0a8', k2: 'gems', g: ['#ffe08a', '#ff5d42', '#ffffff'],
+                fx: ['aura', 'shine', 'electric', 'embers', 'tipflare', 'rainbow'],
+                fc: '#ffc84b', fc2: '#ff7659', ec: '#fff2b3'
             });
             CUES.forEach(d => {
                 d.fxl = d.fx ? [].concat(d.fx) : [];
@@ -3315,7 +3331,7 @@
             const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => {
                     en.target._p.vis = en.isIntersecting;
                 }), {root: $('cgrid')}) : null;
-            const order = [HUTAO, JOSE_CUE, MARLON_CUE, PEDRO_CUE];
+            const order = [HUTAO, JOSE_CUE, MARLON_CUE, PEDRO_CUE, HAROLD_CUE, ANDERSON_CUE];
             for (let i = 0; i < HUTAO; i++)
                 order.push(i);
             order.forEach(i => {
@@ -3363,7 +3379,7 @@
                     sprites[step] = buildSprite(CUES[cueIdx[step]]);
                 }
                 $('cueTitle').textContent = `🎯 ${names[step]}: elige tu taco`;
-                $('cueSub').textContent = step === 0 ? '104 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra de Acero: MARLON · Centinela Jade: PEDRO'
+                $('cueSub').textContent = step === 0 ? '106 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra de Acero: MARLON · Centinela Jade: PEDRO · Eclipse Boreal: HAROLD · León Solar: ANDERSON'
                         : `${names[0]} eligió: ${CUES[cueIdx[0]].n} · ahora elige ${names[1]}`;
                 $('cueNext').textContent = (step === 0 && !vsCpu) ? `Siguiente: ${names[1]} →` : 'Elegir mesa →';
                 cards.forEach((c, k) => {
