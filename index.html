@@ -348,6 +348,7 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 12px;
             }
+            .home-modes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
             #menu .panel {
                 max-width: 1080px;
             }
@@ -361,7 +362,7 @@
                 font-size: 19px;
             }
             @media (max-width: 720px) {
-                .modes, #menu .modes {
+                .modes, #menu .modes, .home-modes {
                     grid-template-columns: 1fr;
                 }
             }
@@ -725,7 +726,19 @@
             .tourney-lines { display:grid; gap:6px; margin-top:10px; }
             .tourney-row { display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px; padding:7px 9px; border-radius:8px; background:#111a15; color:#c8d1cb; font-size:12px; }
             .tourney-row select { min-width:125px; }
+            .tourney-pick-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:8px; max-height:52vh; overflow:auto; padding:4px; }
+            .tourney-pick-list label { display:flex; align-items:center; gap:8px; margin:0; padding:10px; border:1px solid #323b4a; border-radius:10px; background:#1b212b; color:#eef2f7; cursor:pointer; }
+            .tourney-pick-list input { width:18px; height:18px; accent-color:#ffd75e; }
+            .bracket-board { display:flex; align-items:stretch; gap:12px; overflow:auto; padding:4px 2px 12px; }
+            .bracket-round { flex:0 0 230px; display:flex; flex-direction:column; gap:8px; padding:12px; border:1px solid #323b4a; border-radius:14px; background:#1b212b; }
+            .bracket-round h3 { margin:0 0 4px; color:#ffd75e; font-size:15px; }
+            .bracket-match { padding:10px; border:1px solid #323b4a; border-radius:10px; background:#111720; color:#eef2f7; font-size:13px; line-height:1.55; }
+            .bracket-match.next { border-color:#ffd75e; box-shadow:0 0 12px rgba(255,215,94,.24); }
+            .bracket-match.winner { border-color:#3ddc84; }
+            .bracket-match small { display:block; color:#9fb0c8; }
             @media (max-width:720px) { .pro-grid { grid-template-columns:1fr; } .pro-head { flex-direction:column; } .pro-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } #seriesBadge,#clockBadge { font-size:10px; } }
+                    /* El panel anterior de Competición fue sustituido por el flujo de torneo del inicio. */
+            #proBtn, #proModal { display: none !important; }
         </style>
     </head>
     <body>
@@ -772,8 +785,8 @@
             <div class="panel">
                 <canvas id="homeLogo"></canvas>
                 <h2>¿Cómo quieres jugar?</h2>
-                <p class="sub">Elige tu rival</p>
-                <div class="modes">
+                <p class="sub">Elige cómo quieres jugar</p>
+                <div class="modes home-modes" id="homeModes">
                     <div class="mode" id="hPvp">
                         <div class="top"><div class="badge em">👥</div><h3>Jugador vs Jugador</h3></div>
                         <p>Dos personas en el mismo equipo, por turnos. El punto de victoria se suma a quien gane.</p>
@@ -781,6 +794,10 @@
                     <div class="mode" id="hCpu">
                         <div class="top"><div class="badge em">🤖</div><h3>Jugador vs Computadora</h3></div>
                         <p>Enfréntate al bot de Don Pío. Elige su nivel: fácil, normal o difícil.</p>
+                    </div>
+                    <div class="mode" id="hTournament">
+                        <div class="top"><div class="badge em">🏆</div><h3>Torneo</h3></div>
+                        <p>Arma un cuadro de eliminación con tus participantes y juega cada ronda.</p>
                     </div>
                 </div>
                 <div id="diffBox" style="display:none">
@@ -821,6 +838,34 @@
             </div>
         </div>
 
+        <!-- ===== PARTICIPANTES DEL TORNEO ===== -->
+        <div class="screen" id="tourneyPlayersScreen">
+            <div class="panel">
+                <h2>🏆 Participantes del torneo</h2>
+                <p class="sub">Selecciona de 2 a 16 jugadores. Puedes agregar participantes nuevos y quedarán guardados para la próxima vez.</p>
+                <div class="tourney-pick-list" id="tourneyPlayerList"></div>
+                <p class="sub" id="tourneySelectionCount">0 seleccionados</p>
+                <div class="actions">
+                    <button class="dark" id="backTourneyMode">← Atrás</button>
+                    <button class="dark" id="addTourneyParticipant">＋ Agregar participante</button>
+                    <button id="buildTournament">🎲 Sortear enfrentamientos →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CUADRO DEL TORNEO ===== -->
+        <div class="screen" id="tourneyBracketScreen">
+            <div class="panel">
+                <h2>🏆 Cuadro del torneo</h2>
+                <p class="sub" id="tourneyBracketStatus"></p>
+                <div class="bracket-board" id="tourneyBracketArea"></div>
+                <div class="actions">
+                    <button class="dark" id="exitTournament">Salir al inicio</button>
+                    <button id="startTournamentMatch">▶ Iniciar enfrentamiento</button>
+                </div>
+            </div>
+        </div>
+
         <!-- ===== SELECCIÓN DE JUGADORES ===== -->
         <div class="screen" id="players">
             <div class="panel">
@@ -853,8 +898,8 @@
         <!-- ===== SELECCIÓN DE MESA ===== -->
         <div class="screen" id="tables">
             <div class="panel">
-                <h2>🎨 Elige la mesa</h2>
-                <p class="sub">7 diseños · Don Pío conserva su mesa exclusiva</p>
+                <h2 id="tableTitle">🎨 Elige la mesa</h2>
+                <p class="sub" id="tableSub">7 diseños · Don Pío conserva su mesa exclusiva</p>
                 <div class="tgrid" id="tgrid"></div>
                 <div class="actions">
                     <button class="dark" id="backCues">← Atrás</button>
@@ -902,7 +947,6 @@
                     <section class="pro-card"><h3>Logros locales</h3><p>Se desbloquean jugando y quedan guardados en este dispositivo.</p><div id="achievementSummary" class="pro-note"></div><div id="achievementList" class="achievement-list"></div></section>
                     <section class="pro-card"><h3>Accesibilidad</h3><div class="access-options"><label><input type="checkbox" id="accessLargeText"> Texto más grande</label><label><input type="checkbox" id="accessContrast"> Alto contraste</label><label><input type="checkbox" id="accessReduceMotion"> Reducir animaciones</label></div><p class="pro-note">Los cambios se guardan localmente.</p></section>
                     <section class="pro-card"><h3>Respaldo de datos</h3><p>Exporta o recupera estadísticas, torneo e historial en un archivo local.</p><div class="pro-actions"><button id="exportLocalData">Exportar respaldo</button><button id="importLocalDataBtn" class="dark">Importar respaldo</button><input id="importLocalDataFile" type="file" accept="application/json,.json" hidden></div></section>
-                    <section class="pro-card"><h3>Liga local todos-contra-todos</h3><p>Elige de 2 a 8 jugadores. El cuadro y los resultados se guardan en este dispositivo.</p><div class="tournament-players" id="tournamentPlayers"></div><div class="pro-actions"><button id="makeTournament">Crear fixture</button><button class="dark" id="clearTournament">Borrar liga</button></div><div id="tournamentArea"></div></section>
                 </div>
             </div>
         </div>
@@ -930,7 +974,23 @@
             const STEP = 1000 / 120;
             const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
             const NAMES_L = ['HAROLD', 'JOSE', 'MILTON', 'ANDERSON', 'KAORY'];
-            const NAMES_R = ['MARLON', 'PEDRO', 'PAOLO', 'SILERY'];
+            const NAMES_R_BASE = ['MARLON', 'PEDRO', 'PAOLO', 'SILERY'];
+            const PARTICIPANTS_KEY = 'donpio_custom_participants_v1';
+            const cleanParticipantName = value => String(value || '').replace(/[<>&\"']/g, '').replace(/\s+/g, ' ').trim().slice(0, 24);
+            let customParticipants = [];
+            try {
+                const savedParticipants = JSON.parse(localStorage.getItem(PARTICIPANTS_KEY) || '[]');
+                if (Array.isArray(savedParticipants)) {
+                    const reservedNames = new Set([...NAMES_L, ...NAMES_R_BASE].map(name => name.toLocaleLowerCase('es-PE')));
+                    const seenNames = new Set();
+                    customParticipants = savedParticipants.map(cleanParticipantName).filter(name => {
+                        const key = name.toLocaleLowerCase('es-PE');
+                        if (!name || reservedNames.has(key) || seenNames.has(key)) return false;
+                        seenNames.add(key); return true;
+                    }).slice(0, 16 - NAMES_L.length - NAMES_R_BASE.length);
+                }
+            } catch (e) {}
+            const NAMES_R = [...NAMES_R_BASE, ...customParticipants];
             const ALL_NAMES = [...NAMES_L, ...NAMES_R];
             const BOT_NAME = 'COMPUTADORA';
             const DIFF_LABEL = {facil: 'Fácil', normal: 'Normal', dificil: 'Difícil'};
@@ -1959,6 +2019,9 @@
             const onePocketTargets = [0, 3];
             let bestOf = 1, activeBestOf = 1, seriesWins = [0, 0], matchComplete = false, matchLogged = false;
             let shotClockSeconds = 0, clockRemaining = 0, lastClockAt = performance.now();
+            let tournamentModeSelected = false;
+            let tournamentSessionActive = false, tournamentMatchActive = false, activeTournamentMatch = null, tournamentSettingsBackup = null, tournamentCuePicked = [false, false];
+            let tournamentState = null;
             let consecutiveFouls = [0, 0], calledPocketIndex = null;
             let drillType = "free", shotActor = 0, shotStartedOnBreak = false;
             let replayFrames = [], lastReplay = [], replayCaptureTick = 0, replayPlayback = false, replayStartedAt = 0, priorUiState = false;
@@ -2018,7 +2081,7 @@
             }
             const savePrefs = () => {
             try {
-            localStorage.setItem('donpio_prefs', JSON.stringify({mode, cues: cueIdx, fx: spinOn, aim: aimOn, sfx: sfxOn, names, cpu: vsCpu, diff, table: tableIdx, greenDefaultApplied: true, bestOf, shotClockSeconds, poolRaceTarget, pool141Target, bankRaceTarget, onePocketRace}));
+            localStorage.setItem('donpio_prefs', JSON.stringify({mode, cues: cueIdx, fx: spinOn, aim: (tournamentSessionActive && tournamentSettingsBackup) ? tournamentSettingsBackup.aim : aimOn, sfx: sfxOn, names, cpu: vsCpu, diff, table: tableIdx, greenDefaultApplied: true, bestOf, shotClockSeconds: (tournamentSessionActive && tournamentSettingsBackup) ? tournamentSettingsBackup.clock : shotClockSeconds, poolRaceTarget, pool141Target, bankRaceTarget, onePocketRace}));
             } catch (e) {
             }
             };
@@ -2139,41 +2202,18 @@
                 const winName = pn(winner), loseName = pn(1 - winner), winStat = statFor(winName), loseStat = statFor(loseName);
                 winStat.matches++; winStat.wins++; loseStat.matches++; loseStat.losses++; proStats[winName] = winStat; proStats[loseName] = loseStat;
                 unlockAchievement("firstMatch"); if (winStat.wins >= 5) unlockAchievement("fiveWins");
-                if (localTournament) { const fixture = localTournament.fixtures.find(m => !m.winner && ((m.a === winName && m.b === loseName) || (m.b === winName && m.a === loseName))); if (fixture) fixture.winner = winName; }
+                if (tournamentMatchActive && activeTournamentMatch && tournamentState) {
+                    const match = tournamentState.rounds[activeTournamentMatch.roundIndex][activeTournamentMatch.matchIndex];
+                    if (match && [match.a, match.b].includes(winName)) {
+                        match.winner = winName; tournamentMatchActive = false; activeTournamentMatch = null;
+                        advanceTournamentRound(); renderTournamentBracket();
+                    }
+                }
                 matchHistory.unshift({date: new Date().toLocaleString("es-PE"), mode: MODE_NAMES[mode], winner: winName, score: seriesWins[0] + "–" + seriesWins[1]});
                 matchHistory = matchHistory.slice(0, 30); saveProData();
             }
-            function renderTournament() {
-                const box = $("tournamentPlayers"), area = $("tournamentArea"); if (!box || !area) return;
-                const selected = localTournament ? localTournament.players : [names[0], names[1]].filter(n => ALL_NAMES.includes(n));
-                box.innerHTML = ALL_NAMES.map(n => "<label><input type=checkbox value=" + n + (selected.includes(n) ? " checked" : "") + ">" + n + "</label>").join("");
-                if (!localTournament || !Array.isArray(localTournament.fixtures)) { area.innerHTML = ""; return; }
-                const table = Object.fromEntries(localTournament.players.map(n => [n, {played: 0, wins: 0, losses: 0, points: 0}]));
-                for (const m of localTournament.fixtures) if (m.winner && table[m.a] && table[m.b]) {
-                    table[m.a].played++; table[m.b].played++;
-                    const loser = m.winner === m.a ? m.b : m.a; table[m.winner].wins++; table[m.winner].points += 3; table[loser].losses++;
-                }
-                const standings = Object.entries(table).sort((a, b) => b[1].points - a[1].points || b[1].wins - a[1].wins || a[0].localeCompare(b[0]));
-                let html = "<p class=pro-note>" + localTournament.fixtures.filter(m => m.winner).length + " / " + localTournament.fixtures.length + " partidos registrados · victoria = 3 puntos.</p>";
-                html += "<div class=tourney-lines><b>Clasificación</b>" + standings.map(([n, x], i) => "<div class=tourney-row><span>" + (i + 1) + ". " + n + " · " + x.played + " PJ · " + x.wins + " G · " + x.losses + " P</span><b>" + x.points + " pts</b></div>").join("") + "</div>";
-                html += "<div class=tourney-lines><b>Fixture · juega la partida o registra el resultado</b>";
-                html += localTournament.fixtures.map((m, i) => "<div class=tourney-row><span>" + m.a + " vs " + m.b + (m.winner ? " · ganó " + m.winner : "") + "</span><span><button class=dark data-play-fixture=" + i + ">Jugar</button> <select data-fixture=" + i + "><option value=''>Pendiente</option><option value=" + m.a + (m.winner === m.a ? " selected" : "") + ">" + m.a + "</option><option value=" + m.b + (m.winner === m.b ? " selected" : "") + ">" + m.b + "</option></select></span></div>").join("");
-                html += "</div>"; area.innerHTML = html;
-                area.querySelectorAll("[data-fixture]").forEach(el => el.addEventListener("change", () => {
-                    const m = localTournament.fixtures[+el.dataset.fixture];
-                    m.winner = [m.a, m.b].includes(el.value) ? el.value : null;
-                    saveProData(); renderTournament();
-                }));
-                area.querySelectorAll("[data-play-fixture]").forEach(el => el.addEventListener("click", () => {
-                    const m = localTournament.fixtures[+el.dataset.playFixture]; names = [m.a, m.b]; vsCpu = false;
-                    seriesWins = [0, 0]; activeBestOf = bestOf; matchComplete = false; matchLogged = false;
-                    [0, 1].forEach(i => { if (!cueAllowed(cueIdx[i], names[i])) cueIdx[i] = i; sprites[i] = buildSprite(CUES[cueIdx[i]]); });
-                    savePrefs(); closeProPanel(); newGame(); show(null);
-                    say("Liga local · " + names[0] + " contra " + names[1] + " · " + MODE_NAMES[mode] + ".");
-                }));
-            }
             function renderProPanel() {
-                const best = $("bestOfSelect"), clock = $("shotClockSelect"); if (best) best.value = String(bestOf); if (clock) clock.value = String(shotClockSeconds);
+                const best = $("bestOfSelect"), clock = $("shotClockSelect"); if (best) best.value = String(bestOf); if (clock) clock.value = String(tournamentSessionActive ? 15 : shotClockSeconds);
                 $("poolRaceTarget").value=String(poolRaceTarget); $("pool141Target").value=String(pool141Target); $("bankRaceTarget").value=String(bankRaceTarget); $("onePocketRace").value=String(onePocketRace);
                 const namesNow = [names[0], isBot(1) ? BOT_NAME : names[1]], labels = ["Partidas", "Victorias", "Derrotas", "Tiros", "Tiros de práctica", "Bolas / tiro", "Faltas", "Mejor serie", "Break con bola", "Bolas embocadas"], values = [];
                 for (const n of namesNow) {
@@ -2184,7 +2224,7 @@
                 $("proStats").innerHTML = values.join("");
                 const history = $("proHistory"); if (history && !history.hidden) history.innerHTML = matchHistory.length ? matchHistory.map(m => "<div class=pro-history-row><span>" + m.date + " · " + m.mode + "</span><b>" + m.winner + " · " + m.score + "</b></div>").join("") : "<p>Aún no hay partidas completadas.</p>";
                 $("lastReplay").disabled = lastReplay.length < 2;
-                renderTournament(); renderSavedReplays(); renderAchievements(); updateLocalSaveStatus();
+                renderSavedReplays(); renderAchievements(); updateLocalSaveStatus();
                 $("seriesBadge").textContent = "SERIE " + seriesWins[0] + "–" + seriesWins[1] + " · " + activeBestOf; updateClockBadge();
             }
             function renderCallPocket() {
@@ -4114,6 +4154,7 @@
             savePrefs();
             }
             function setAim(on) {
+            if (tournamentSessionActive && on) on = false;
             aimOn = on;
             $('aimChk').checked = on;
             $('aimBtn').textContent = '🎯 Ayuda: ' + (on ? 'SÍ' : 'NO');
@@ -4138,7 +4179,7 @@
             /* ============================================================
              PANTALLAS: inicio · modo · jugadores · taco · mesa · ganador
              ============================================================ */
-            const screens = {home: $('home'), menu: $('menu'), players: $('players'), cues: $('cues'), tables: $('tables'), win: $('win')};
+            const screens = {home: $('home'), menu: $('menu'), players: $('players'), tourneyPlayersScreen: $('tourneyPlayersScreen'), tourneyBracketScreen: $('tourneyBracketScreen'), cues: $('cues'), tables: $('tables'), win: $('win')};
             function show(name) {
             Object.entries(screens).forEach(([k, el]) => el.classList.toggle('open', k === name));
             uiOpen = !!name;
@@ -4180,7 +4221,7 @@
             $("closePro").addEventListener("click", closeProPanel);
             $("proModal").addEventListener("click", e => { if (e.target === $("proModal")) closeProPanel(); });
             $("bestOfSelect").addEventListener("change", e => { bestOf = [1, 3, 5, 7].includes(+e.target.value) ? +e.target.value : 1; savePrefs(); renderProPanel(); });
-            $("shotClockSelect").addEventListener("change", e => { shotClockSeconds = [0, 30, 45, 60].includes(+e.target.value) ? +e.target.value : 0; clockRemaining = shotClockSeconds; lastClockAt = performance.now(); savePrefs(); renderProPanel(); });
+            $("shotClockSelect").addEventListener("change", e => { if (tournamentSessionActive) { e.target.value = "15"; return; } shotClockSeconds = [0, 30, 45, 60].includes(+e.target.value) ? +e.target.value : 0; clockRemaining = shotClockSeconds; lastClockAt = performance.now(); savePrefs(); renderProPanel(); });
             $("poolRaceTarget").addEventListener("change", e => { poolRaceTarget=[5,8,10,15].includes(+e.target.value)?+e.target.value:8; savePrefs(); hud(); });
             $("pool141Target").addEventListener("change", e => { pool141Target=[25,50,75,100,150].includes(+e.target.value)?+e.target.value:50; savePrefs(); hud(); });
             $("bankRaceTarget").addEventListener("change", e => { bankRaceTarget=[3,5,8,10].includes(+e.target.value)?+e.target.value:5; savePrefs(); hud(); });
@@ -4195,16 +4236,6 @@
                 if (!confirm("¿Borrar las estadísticas y el historial profesional guardados en este dispositivo?")) return;
                 proStats = {}; matchHistory = []; saveProData(); renderProPanel();
             });
-            $("makeTournament").addEventListener("click", () => {
-                const players = Array.from($("tournamentPlayers").querySelectorAll("input:checked")).map(x => x.value).filter(n => ALL_NAMES.includes(n));
-                if (players.length < 2 || players.length > 8) { alert("Elige de 2 a 8 jugadores para la liga local."); return; }
-                const fixtures = []; for (let i = 0; i < players.length; i++) for (let j = i + 1; j < players.length; j++) fixtures.push({a: players[i], b: players[j], winner: null});
-                localTournament = {players, fixtures, created: new Date().toLocaleString("es-PE")}; saveProData(); renderTournament();
-            });
-            $("clearTournament").addEventListener("click", () => {
-                if (!localTournament || !confirm("¿Borrar el fixture y los resultados de la liga local?")) return;
-                localTournament = null; saveProData(); renderTournament();
-            });
             $("toggleHistory").addEventListener("click", () => {
                 const box = $("proHistory"); box.hidden = !box.hidden;
                 $("toggleHistory").textContent = box.hidden ? "Ver historial local" : "Ocultar historial"; renderProPanel();
@@ -4215,29 +4246,150 @@
                 paused = false; $("pauseGame").textContent = "⏸ Pausa"; replayPlayback = true; replayStartedAt = performance.now(); closeProPanel();
                 say("Reproduciendo el último tiro. Pulsa Escape para cerrar la repetición.");
             });
+            function escapeTournamentText(value) { return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+            function shuffleTournamentPlayers(players) {
+                const out = players.slice();
+                for (let i = out.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
+                return out;
+            }
+            function makeTournamentRound(players) {
+                const remaining = shuffleTournamentPlayers(players), matches = [];
+                if (remaining.length % 2) {
+                    const byeIndex = Math.floor(Math.random() * remaining.length), byePlayer = remaining.splice(byeIndex, 1)[0];
+                    matches.push({a: byePlayer, b: null, winner: byePlayer, bye: true});
+                }
+                while (remaining.length) matches.push({a: remaining.shift(), b: remaining.shift(), winner: null, bye: false});
+                return matches;
+            }
+            function currentTournamentMatch() {
+                if (!tournamentState || tournamentState.champion) return null;
+                const roundIndex = tournamentState.rounds.length - 1, matches = tournamentState.rounds[roundIndex];
+                const matchIndex = matches.findIndex(match => !match.winner && match.b);
+                return matchIndex < 0 ? null : {roundIndex, matchIndex, match: matches[matchIndex]};
+            }
+            function advanceTournamentRound() {
+                if (!tournamentState || tournamentState.champion) return;
+                const round = tournamentState.rounds[tournamentState.rounds.length - 1];
+                if (!round.every(match => match.winner)) return;
+                const winners = round.map(match => match.winner).filter(Boolean);
+                if (winners.length === 1) tournamentState.champion = winners[0];
+                else tournamentState.rounds.push(makeTournamentRound(winners));
+            }
+            function renderTournamentParticipants(preserveSelection = false) {
+                const list = $("tourneyPlayerList");
+                const selected = preserveSelection
+                    ? new Set(Array.from(list.querySelectorAll('input:checked')).map(input => ALL_NAMES[+input.dataset.tourneyIndex]).filter(Boolean))
+                    : new Set([names[0], names[1]]);
+                list.innerHTML = ALL_NAMES.map((name, index) => '<label><input type="checkbox" data-tourney-index="' + index + '"' + (selected.has(name) ? ' checked' : '') + '>' + escapeTournamentText(name) + '</label>').join('');
+                const updateCount = () => { const count = list.querySelectorAll("input:checked").length; $("tourneySelectionCount").textContent = count + " seleccionado" + (count === 1 ? "" : "s") + " · el cuadro permite hasta 16 jugadores."; };
+                list.querySelectorAll("input").forEach(input => input.addEventListener("change", updateCount)); updateCount();
+            }
+            function addTournamentParticipant() {
+                const entered = prompt("Nombre del nuevo participante (máximo 24 caracteres):");
+                if (entered === null) return;
+                const name = cleanParticipantName(entered);
+                if (!name) { alert("Escribe un nombre válido."); return; }
+                if (ALL_NAMES.some(existing => existing.toLocaleLowerCase("es-PE") === name.toLocaleLowerCase("es-PE"))) { alert("Ese participante ya existe."); return; }
+                if (ALL_NAMES.length >= 16) { alert("El torneo admite hasta 16 participantes."); return; }
+                customParticipants.push(name); NAMES_R.push(name); ALL_NAMES.push(name);
+                try { localStorage.setItem(PARTICIPANTS_KEY, JSON.stringify(customParticipants)); } catch (e) {}
+                renderTournamentParticipants(true);
+                const added = $("tourneyPlayerList").querySelector('input[data-tourney-index="' + (ALL_NAMES.length - 1) + '"]');
+                if (added) { added.checked = true; added.dispatchEvent(new Event("change", {bubbles:true})); }
+            }
+            function createTournamentBracket() {
+                const players = Array.from($("tourneyPlayerList").querySelectorAll("input:checked")).map(input => ALL_NAMES[+input.dataset.tourneyIndex]).filter(Boolean);
+                if (players.length < 2) { alert("Selecciona al menos 2 participantes."); return; }
+                if (players.length > 16) { alert("El torneo admite hasta 16 participantes."); return; }
+                tournamentState = {mode, participants: players.slice(), rounds: [makeTournamentRound(players)], champion: null};
+                tournamentModeSelected = true; tournamentMatchActive = false; activeTournamentMatch = null;
+                renderTournamentBracket(); show("tourneyBracketScreen");
+            }
+            function renderTournamentBracket() {
+                if (!tournamentState) return;
+                const box = $("tourneyBracketArea"), pending = currentTournamentMatch();
+                box.innerHTML = tournamentState.rounds.map((round, roundIndex) => {
+                    const title = roundIndex === tournamentState.rounds.length - 1 && round.length === 1 ? "Final" : "Ronda " + (roundIndex + 1);
+                    const cards = round.map((match, matchIndex) => {
+                        const isNext = !!pending && pending.roundIndex === roundIndex && pending.matchIndex === matchIndex;
+                        const cls = "bracket-match" + (isNext ? " next" : "") + (match.winner && !match.bye ? " winner" : "");
+                        const duel = match.bye ? "<b>" + escapeTournamentText(match.a) + "</b><small>Pasa directo a la siguiente ronda</small>" : "<b>" + escapeTournamentText(match.a) + "</b><br>vs<br><b>" + escapeTournamentText(match.b) + "</b>";
+                        const status = match.bye ? "Pase libre" : match.winner ? "Ganó " + escapeTournamentText(match.winner) : isNext ? "Siguiente enfrentamiento" : "Por jugar";
+                        return '<div class="' + cls + '">' + duel + '<small>' + status + '</small></div>';
+                    }).join("");
+                    return '<section class="bracket-round"><h3>' + title + '</h3>' + cards + '</section>';
+                }).join("");
+                const status = tournamentState.champion
+                    ? "🏆 " + tournamentState.champion + " es el campeón · " + MODE_NAMES[tournamentState.mode] + "."
+                    : pending ? MODE_NAMES[tournamentState.mode] + " · " + tournamentState.participants.length + " participantes · siguiente: " + pending.match.a + " vs " + pending.match.b + ". Elijan sus tacos antes de jugar."
+                    : "La ronda terminó. Preparando los siguientes enfrentamientos.";
+                $("tourneyBracketStatus").textContent = status;
+                const button = $("startTournamentMatch"); button.disabled = !pending;
+                button.textContent = tournamentState.champion ? "Torneo finalizado" : "▶ Iniciar: " + pending.match.a + " vs " + pending.match.b;
+            }
+            function beginTournamentSession() {
+                if (tournamentSessionActive) return;
+                tournamentSettingsBackup = {clock: shotClockSeconds, aim: aimOn}; tournamentSessionActive = true;
+                shotClockSeconds = 15; clockRemaining = 15; lastClockAt = performance.now();
+                setAim(false); $("aimBtn").disabled = true; $("aimChk").disabled = true;
+            }
+            function startNextTournamentMatch() {
+                if (!tournamentState || tournamentState.champion) return;
+                advanceTournamentRound();
+                const next = currentTournamentMatch(); if (!next) { renderTournamentBracket(); return; }
+                beginTournamentSession(); activeTournamentMatch = {roundIndex: next.roundIndex, matchIndex: next.matchIndex}; tournamentMatchActive = true;
+                names = [next.match.a, next.match.b]; vsCpu = false; mode = tournamentState.mode; pickMode(mode);
+                seriesWins = [0, 0]; activeBestOf = 1; matchComplete = false; matchLogged = false; tournamentCuePicked = [false, false];
+                [0, 1].forEach(i => { if (!cueAllowed(cueIdx[i], names[i])) cueIdx[i] = i; sprites[i] = buildSprite(CUES[cueIdx[i]]); });
+                tableIdx = Math.random() < .5 ? 1 : 0; tableLayer = getTable(tableIdx);
+                clockRemaining = 15; lastClockAt = performance.now(); savePrefs(); cueScreen(0);
+            }
+            function returnToTournamentBracket() {
+                tournamentMatchActive = false; activeTournamentMatch = null;
+                if (tournamentState) { renderTournamentBracket(); show("tourneyBracketScreen"); } else show("home");
+            }
+            function finishTournamentSession() {
+                tournamentMatchActive = false; activeTournamentMatch = null; tournamentSessionActive = false;
+                $("aimBtn").disabled = false; $("aimChk").disabled = false;
+                if (tournamentSettingsBackup) {
+                    shotClockSeconds = tournamentSettingsBackup.clock; clockRemaining = shotClockSeconds; lastClockAt = performance.now();
+                    const aimBackup = tournamentSettingsBackup.aim; tournamentSettingsBackup = null; setAim(aimBackup);
+                }
+                tournamentState = null; tournamentModeSelected = false; paintHome(); show("home");
+            }
             // INICIO: jugador vs jugador / jugador vs computadora
             function paintHome() {
-            $('hPvp').classList.toggle('sel', !vsCpu);
-            $('hCpu').classList.toggle('sel', vsCpu);
-            $('diffBox').style.display = vsCpu ? '' : 'none';
+            $('hPvp').classList.toggle('sel', !vsCpu && !tournamentModeSelected);
+            $('hCpu').classList.toggle('sel', vsCpu && !tournamentModeSelected);
+            $('hTournament').classList.toggle('sel', tournamentModeSelected);
+            $('diffBox').style.display = vsCpu && !tournamentModeSelected ? '' : 'none';
+            $('homeNext').textContent = tournamentModeSelected ? 'Elegir modo de juego →' : 'Continuar →';
+            $('toPlayers').textContent = tournamentModeSelected ? 'Elegir participantes →' : 'Elegir jugadores →';
+            const practice = document.querySelector('.mode[data-mode="17"]'); if (practice) practice.style.display = tournamentModeSelected ? 'none' : '';
+
             document.querySelectorAll('#diffBox button').forEach(b => b.classList.toggle('sel', b.dataset.d === diff));
             }
             $('hPvp').addEventListener('click', () => {
-            vsCpu = false;
+            vsCpu = false; tournamentModeSelected = false;
             paintHome();
             savePrefs();
             });
             $('hCpu').addEventListener('click', () => {
-            vsCpu = true;
+            vsCpu = true; tournamentModeSelected = false;
             paintHome();
             savePrefs();
+            });
+            $('hTournament').addEventListener('click', () => {
+            vsCpu = false; tournamentModeSelected = true;
+            if (mode === 17) pickMode(8);
+            paintHome(); savePrefs();
             });
             document.querySelectorAll('#diffBox button').forEach(b => b.addEventListener('click', () => {
             diff = b.dataset.d;
             paintHome();
             savePrefs();
             }));
-            $('homeNext').addEventListener('click', () => show('menu'));
+            $('homeNext').addEventListener('click', () => { paintHome(); show('menu'); });
             $('backHome').addEventListener('click', () => show('home'));
             // Modo de juego
             function pickMode(m) {
@@ -4274,10 +4426,15 @@
             savePrefs();
             }));
             $('toPlayers').addEventListener('click', () => {
-            renderPlayerButtons();
-            show('players');
+            if (tournamentModeSelected) { renderTournamentParticipants(); show('tourneyPlayersScreen'); return; }
+            renderPlayerButtons(); show('players');
             });
             $('backFromPlayers').addEventListener('click', () => show('menu'));
+            $('backTourneyMode').addEventListener('click', () => show('menu'));
+            $('addTourneyParticipant').addEventListener('click', addTournamentParticipant);
+            $('buildTournament').addEventListener('click', createTournamentBracket);
+            $('startTournamentMatch').addEventListener('click', startNextTournamentMatch);
+            $('exitTournament').addEventListener('click', finishTournamentSession);
             $('toCues').addEventListener('click', () => cueScreen(0));
             // Selección de taco: 100 diseños regulares y 3 exclusivos
             const cards = [], pv = [];
@@ -4331,8 +4488,11 @@
             return;
             }
             cueIdx[cueStep] = i;
+            if (tournamentMatchActive) tournamentCuePicked[cueStep] = true;
             sprites[cueStep] = buildSprite(CUES[i]);
             cards.forEach((c, k) => c.classList.toggle('sel', k === i));
+            $("cueNext").disabled = tournamentMatchActive && !tournamentCuePicked[cueStep];
+            if (tournamentMatchActive) $("cueSub").textContent = "Torneo · " + names[cueStep] + " eligió " + CUES[i].n + ". Tiempo por tiro: 15 segundos.";
             savePrefs();
             }
             function cueScreen(step) {
@@ -4342,16 +4502,21 @@
             sprites[step] = buildSprite(CUES[cueIdx[step]]);
             }
             $('cueTitle').textContent = `🎯 ${names[step]}: elige tu taco`;
-            $('cueSub').textContent = step === 0 ? '108 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra de Acero: MARLON · Centinela Jade: PEDRO · Eclipse Boreal: HAROLD · León Rojo: ANDERSON · Noche de Guinda: KAORY · Jardín de Rosa: SILERY'
+            const cueHint = step === 0 ? '108 diseños con efectos únicos · Hu Tao: MILTON · Rayo Celeste: JOSE · Sombra de Acero: MARLON · Centinela Jade: PEDRO · Eclipse Boreal: HAROLD · León Rojo: ANDERSON · Noche de Guinda: KAORY · Jardín de Rosa: SILERY'
                     : `${names[0]} eligió: ${CUES[cueIdx[0]].n} · ahora elige ${names[1]}`;
+            $('cueSub').textContent = tournamentMatchActive
+                    ? (tournamentCuePicked[step] ? `Torneo · ${names[step]} eligió ${CUES[cueIdx[step]].n}. Tiempo por tiro: 15 segundos.` : `Torneo · ${names[step]}, selecciona tu taco. Tiempo por tiro: 15 segundos.`)
+                    : cueHint;
             $('cueNext').textContent = (step === 0 && !vsCpu) ? `Siguiente: ${names[1]} →` : 'Elegir mesa →';
+            $('cueNext').disabled = tournamentMatchActive && !tournamentCuePicked[step];
             cards.forEach((c, k) => {
-            c.classList.toggle('sel', k === cueIdx[step]);
+            c.classList.toggle('sel', k === cueIdx[step] && (!tournamentMatchActive || tournamentCuePicked[step]));
             c.classList.toggle('lock', !cueAllowed(k, names[step]));
             });
             show('cues');
             }
             $('backMenu').addEventListener('click', () => {
+            if (tournamentSessionActive && cueStep === 0) { returnToTournamentBracket(); return; }
             if (cueStep === 1)
                     cueScreen(0);
             else
@@ -4372,13 +4537,17 @@
             }
             openTables();
             });
-            $('menuBtn').addEventListener('click', () => show('home'));
+            $('menuBtn').addEventListener('click', () => tournamentSessionActive ? returnToTournamentBracket() : show('home'));
             // Selección de mesa
             const tcards = [];
             function openTables() {
             $('tgrid').innerHTML = '';
             tcards.length = 0;
-            [1, 0, 2, 3, 4, 5, 6].forEach(i => {
+            const tableChoices = tournamentMatchActive ? [tableIdx] : [1, 0, 2, 3, 4, 5, 6];
+            $('tableTitle').textContent = tournamentMatchActive ? '🎲 Mesa sorteada' : '🎨 Elige la mesa';
+            $('tableSub').textContent = tournamentMatchActive ? `El sorteo eligió ${TABLES[tableIdx].n}. Cada tiro tiene 15 segundos.` : '7 diseños · Don Pío conserva su mesa exclusiva';
+            $('startGame').textContent = tournamentMatchActive ? '▶ Jugar · 15 s por tiro' : '▶ Iniciar partida';
+            tableChoices.forEach(i => {
             const T = TABLES[i];
             const card = document.createElement('div');
             card.dataset.tableIndex = i;
@@ -4389,7 +4558,7 @@
             c.getContext('2d').drawImage(getTable(i), 0, 0, c.width, c.height);
             card.appendChild(c);
             card.insertAdjacentHTML('beforeend', `<b>${i === 1 ? 1 : i === 0 ? 2 : i + 1}. ${T.n}</b>${T.ex ? ' ✨' : ''}`);
-            card.addEventListener('click', () => pickTable(i));
+            card.addEventListener('click', () => { if (!tournamentMatchActive) pickTable(i); });
             $('tgrid').appendChild(card);
             tcards.push(card);
             });
@@ -4403,7 +4572,8 @@
             }
             $('backCues').addEventListener('click', () => cueScreen(vsCpu ? 0 : 1));
             $('startGame').addEventListener('click', () => {
-            seriesWins = [0, 0]; activeBestOf = bestOf; matchComplete = false; matchLogged = false;
+            if (tournamentSessionActive) { shotClockSeconds = 15; clockRemaining = 15; lastClockAt = performance.now(); }
+            seriesWins = [0, 0]; activeBestOf = tournamentMatchActive ? 1 : bestOf; matchComplete = false; matchLogged = false;
             newGame();
             show(null);
             });
@@ -4413,6 +4583,8 @@
                 const w = pn(winner), targetWins = Math.ceil(activeBestOf / 2);
                 $("winActions").style.display = "";
                 $("rematch").textContent = matchComplete ? "🔁 Revancha" : "▶ Siguiente juego";
+                $("winMenu").textContent = tournamentSessionActive ? "🏆 Ver cuadro y siguiente cruce" : "☰ Menú principal";
+                $("rematch").style.display = tournamentSessionActive ? "none" : "";
                 if (!matchComplete) {
                     $("winTitle").textContent = "🏁 " + w + " gana este juego";
                     $("winSub").textContent = "Serie " + seriesWins[0] + "–" + seriesWins[1] + " · gana " + targetWins + " para llevarse el encuentro.";
@@ -4427,6 +4599,7 @@
                     $("winGive").textContent = "🏆 Sumar punto a " + w;
                     $("winPointBox").style.display = ""; $("winSkipBox").style.display = "";
                 }
+                if (tournamentSessionActive) { $("winPointBox").style.display = "none"; $("winSkipBox").style.display = "none"; }
                 renderProPanel(); show("win");
             }
             $('winGive').addEventListener('click', () => {
@@ -4448,11 +4621,13 @@
             $('winActions').style.display = '';
             });
             $('rematch').addEventListener('click', () => {
+            if (tournamentSessionActive) { returnToTournamentBracket(); return; }
             if (matchComplete) { seriesWins = [0, 0]; activeBestOf = bestOf; matchComplete = false; matchLogged = false; }
             newGame();
             show(null);
             });
             $('winMenu').addEventListener('click', () => {
+            if (tournamentSessionActive) { returnToTournamentBracket(); return; }
             seriesWins = [0, 0]; activeBestOf = bestOf; matchComplete = false; matchLogged = false;
             newGame();
             show('home');
