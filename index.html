@@ -681,6 +681,51 @@
                 max-width: 640px;
                 text-align: center;
             }
+            /* Herramientas de competición local */
+            #seriesBadge, #clockBadge { display:inline-flex; align-items:center; justify-content:center; min-height:34px; padding:7px 11px; border:1px solid #46536a; border-radius:10px; background:linear-gradient(135deg,#17251f,#1b212b); color:#d8e7d9; font-size:12px; font-weight:800; letter-spacing:.35px; }
+            #clockBadge.urgent { color:#fff; background:#7f2525; border-color:#ff7777; animation:clockPulse .8s infinite alternate; }
+            #callPocketWrap { display:flex; flex-direction:column; gap:3px; padding:4px 8px; border:1px solid #46536a; border-radius:10px; background:#151d19; color:#cbd8cd; font-size:10px; font-weight:700; }
+            #callPocketWrap[hidden] { display:none; }
+            #calledPocket { max-width:210px; padding:5px 7px; border:1px solid #657668; border-radius:7px; background:#101611; color:#e6efe7; font:600 11px system-ui,sans-serif; }
+            .access-options { display:grid; gap:8px; margin:12px 0; }
+            .access-options label { display:flex; align-items:center; gap:8px; color:#e4ede5; }
+            .achievement-list { display:grid; gap:7px; margin-top:8px; }
+            .achievement-row { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 10px; border:1px solid #35443a; border-radius:9px; background:#101713; color:#e5ece6; }
+            .achievement-row.locked { opacity:.55; }
+            .achievement-row small { color:#aeb9b1; text-align:right; }
+            body.access-reduced-motion *, body.access-reduced-motion *::before, body.access-reduced-motion *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; scroll-behavior:auto!important; }
+            body.access-high-contrast .panel, body.access-high-contrast .pro-card, body.access-high-contrast .mode { border-color:#f4df9b!important; }
+            body.access-high-contrast .sub, body.access-high-contrast .pro-card p { color:#fff!important; }
+            body.access-large-text .sub, body.access-large-text .pro-card p, body.access-large-text .access-options label { font-size:1.15em!important; }
+            @keyframes clockPulse { to { box-shadow:0 0 15px rgba(255,70,70,.5); } }
+            #proBtn { background:#d7e5d9; color:#122319; }
+            .pro-backdrop { position:fixed; inset:0; z-index:100; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(5,8,12,.82); backdrop-filter:blur(8px); }
+            .pro-backdrop.open { display:flex; }
+            .pro-panel { width:min(1040px,100%); max-height:92vh; overflow:auto; padding:22px; border:1px solid #415247; border-radius:20px; background:linear-gradient(145deg,#17231d,#111820 60%,#101318); box-shadow:0 28px 90px #000b; }
+            .pro-head { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:16px; }
+            .pro-head h2 { margin:0; color:#d5e9d8; font-size:25px; }
+            .pro-head p { margin:5px 0 0; color:#aab9b1; font-size:13px; }
+            .pro-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+            .pro-card { padding:16px; border:1px solid #35443b; border-radius:15px; background:rgba(28,39,34,.82); }
+            .pro-card h3 { margin:0 0 10px; color:#e7ce86; font-size:16px; }
+            .pro-card p { margin:6px 0; color:#c0cbc4; font-size:13px; line-height:1.5; }
+            .pro-card label { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0; color:#d9e2dc; font-size:13px; }
+            .pro-card select { min-width:125px; padding:8px 10px; border:1px solid #516458; border-radius:8px; background:#101713; color:#eef5ef; }
+            .pro-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+            .pro-actions button { padding:9px 12px; font-size:13px; }
+            .pro-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+            .pro-stat { padding:10px 7px; border-radius:10px; text-align:center; background:#111a15; color:#aab9b1; font-size:11px; }
+            .pro-stat b { display:block; margin-top:4px; color:#f3f4ea; font-size:18px; }
+            .pro-history { margin-top:10px; max-height:160px; overflow:auto; }
+            .pro-history-row { display:flex; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid #ffffff14; color:#c8d1cb; font-size:12px; }
+            .pro-note { padding:9px 11px; border-left:3px solid #76aa80; background:#15221a; color:#b9c9bd; font-size:12px; line-height:1.5; }
+            .tournament-players { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; margin:10px 0; }
+            .tournament-players label { justify-content:flex-start; margin:0; padding:6px 8px; border-radius:8px; background:#111a15; }
+            .tournament-players input { accent-color:#a6d0aa; }
+            .tourney-lines { display:grid; gap:6px; margin-top:10px; }
+            .tourney-row { display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px; padding:7px 9px; border-radius:8px; background:#111a15; color:#c8d1cb; font-size:12px; }
+            .tourney-row select { min-width:125px; }
+            @media (max-width:720px) { .pro-grid { grid-template-columns:1fr; } .pro-head { flex-direction:column; } .pro-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } #seriesBadge,#clockBadge { font-size:10px; } }
         </style>
     </head>
     <body>
@@ -696,6 +741,9 @@
                     <div class="pw"><canvas class="pball" id="pb0"></canvas><div class="pl" id="p0"></div></div>
                     <div class="pw"><canvas class="pball" id="pb1"></canvas><div class="pl" id="p1"></div></div>
                     <div id="power" title="Fuerza del tiro"><i id="powerFill"></i></div>
+                    <div id="seriesBadge">SERIE 0–0</div>
+                    <div id="clockBadge">⏱ LIBRE</div>
+                    <div id="callPocketWrap" hidden><label id="callPocketLabel" for="calledPocket">Tronera cantada</label><select id="calledPocket" aria-label="Tronera cantada"><option value="">Elegir tronera…</option><option value="0">Esquina superior izquierda</option><option value="1">Esquina superior derecha</option><option value="2">Esquina inferior izquierda</option><option value="3">Esquina inferior derecha</option><option value="4">Centro superior</option><option value="5">Centro inferior</option></select></div>
                     <div id="spinBox" title="Punto de contacto en la bola blanca">
                         <canvas id="spinCv" width="116" height="116"></canvas>
                         <div><b>Efecto</b>Arriba: seguir<br>Abajo: retro<br>Lados: lateral</div>
@@ -705,8 +753,10 @@
                     <button id="sfxBtn" class="dark" title="Activar o desactivar los sonidos del juego">🔔 Sonidos: SÍ</button>
                     <button id="music" class="dark" title="Activar o silenciar la música">🔇 Música</button>
                     <button id="nextTrack" class="dark" title="Siguiente canción">⏭</button>
+                    <button id="pauseGame" class="dark" title="Pausar o reanudar la partida">⏸ Pausa</button>
                     <button id="menuBtn" class="dark">☰ Menú</button>
                     <button id="reset">Reiniciar Juego</button>
+                    <button id="proBtn" class="dark">🏁 Competición</button>
                 </header>
                 <canvas id="c"></canvas>
                 <p id="msg"></p>
@@ -758,6 +808,9 @@
                     <div class="mode" data-mode="14"><div class="top"><div class="badge em">14</div><h3>Pool continuo</h3></div><p>Cualquier bola puede ser objetivo. Suma una por cada bola embocada; meta: 8.</p></div>
                     <div class="mode" data-mode="15"><div class="top"><div class="badge">61</div><h3>Rotación 61</h3></div><p>Toca primero la menor; cada bola vale su número. Meta: 61 puntos.</p></div>
                     <div class="mode" data-mode="16"><div class="top"><div class="badge em">↗</div><h3>Banco</h3></div><p>La bola que puntúa debe tocar banda antes de caer. Meta: 5 bolas.</p></div>
+                    <div class="mode" data-mode="17"><div class="top"><div class="badge em">🎓</div><h3>Práctica profesional</h3></div><p>Entrena tiros, control de blanca, bandas y defensa sin finalizar la partida.</p></div>
+                    <div class="mode" data-mode="18"><div class="top"><div class="badge em">14.1</div><h3>Pool continuo</h3></div><p>Un punto por bola embocada; al despejar 14, se vuelve a armar el rack. Meta: 50.</p></div>
+                    <div class="mode" data-mode="19"><div class="top"><div class="badge em">1P</div><h3>One Pocket</h3></div><p>Compite por embocar ocho bolas en tu tronera de esquina asignada.</p></div>
                 </div>
                 <label class="opt"><input type="checkbox" id="fxChk"> <span>Jugar con <b>efectos</b> en la bola <small>(seguir, retro y lateral)</small></span></label>
                 <label class="opt"><input type="checkbox" id="aimChk"> <span>Mostrar <b>ayuda de disparo</b> <small>(línea guía y bola fantasma)</small></span></label>
@@ -820,6 +873,36 @@
                 <div class="actions" id="winActions" style="display:none">
                     <button id="rematch">🔁 Revancha</button>
                     <button class="dark" id="winMenu">☰ Menú principal</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="pro-backdrop" id="proModal" aria-hidden="true">
+            <div class="pro-panel" role="dialog" aria-modal="true" aria-labelledby="proTitle">
+                <div class="pro-head"><div><h2 id="proTitle">🏁 Centro profesional local</h2><p>Competición, práctica y estadísticas guardadas solo en este dispositivo.</p></div><button class="dark" id="closePro">Cerrar ✕</button></div>
+                <div class="pro-grid">
+                    <section class="pro-card"><h3>Formato de partida</h3>
+                        <label>Serie <select id="bestOfSelect"><option value="1">Un juego</option><option value="3">Al mejor de 3</option><option value="5">Al mejor de 5</option><option value="7">Al mejor de 7</option></select></label>
+                        <label>Reloj de tiro <select id="shotClockSelect"><option value="0">Sin límite</option><option value="30">30 segundos</option><option value="45">45 segundos</option><option value="60">60 segundos</option></select></label>
+                        <label>Meta pool continuo <select id="poolRaceTarget"><option value="5">5 bolas</option><option value="8">8 bolas</option><option value="10">10 bolas</option><option value="15">15 bolas</option></select></label>
+                        <label>Meta 14.1 <select id="pool141Target"><option value="25">25 puntos</option><option value="50">50 puntos</option><option value="75">75 puntos</option><option value="100">100 puntos</option><option value="150">150 puntos</option></select></label>
+                        <label>Meta Banco <select id="bankRaceTarget"><option value="3">3 bolas</option><option value="5">5 bolas</option><option value="8">8 bolas</option><option value="10">10 bolas</option></select></label>
+                        <label>Meta One Pocket <select id="onePocketRace"><option value="5">5 puntos</option><option value="6">6 puntos</option><option value="7">7 puntos</option><option value="8">8 puntos</option></select></label>
+                        <div class="pro-actions"><button id="proPreset">Aplicar preset de torneo</button><button class="dark" id="resetProStats">Borrar estadísticas locales</button></div>
+                        <p class="pro-note">La serie queda fijada al iniciar la partida; el reloj corre incluso al colocar la blanca. En Bola 8 y 10 se canta la tronera final; en Bola 9, tres faltas consecutivas terminan la partida.</p>
+                    </section>
+                    <section class="pro-card"><h3>Estadísticas de los jugadores</h3><div class="pro-stats" id="proStats"></div><div class="pro-actions"><button class="dark" id="toggleHistory">Ver historial local</button></div><div class="pro-history" id="proHistory" hidden></div></section>
+                    <section class="pro-card"><h3>Entrenamiento</h3><p>La práctica no suma victorias ni termina la partida por embocar una bola.</p>
+                        <div class="pro-actions"><button data-drill="free">Mesa libre</button><button data-drill="break">Rompimiento</button><button data-drill="control">Control de blanca</button><button data-drill="bank">Tiro de banda</button><button data-drill="safety">Juego defensivo</button><button data-drill="straight">Tiro recto</button><button data-drill="cut">Tiro de corte</button><button data-drill="carom">Combinación</button></div>
+                        <div class="pro-actions"><button class="dark" id="lastReplay">⏪ Repetir último tiro</button><button class="dark" id="saveCurrentReplay">Guardar repetición</button></div>
+                        <div class="pro-history" id="savedReplayList"></div>
+                    </section>
+                    <section class="pro-card"><h3>Reglamento y mesa</h3><p>Se conservan los modos de Bola 8, 9, 7 y 10, Banco, Rotación, Pool continuo 14.1 y One Pocket.</p><p>El preset de torneo desactiva la guía, activa los efectos, fija reloj de 30 segundos y prepara una serie al mejor de 5. Las flechas ← y → afinan el ángulo; con Mayús, el ajuste es más pequeño.</p><p class="pro-note">La mesa verde «Verde Clásico» queda como primera opción y como mesa predeterminada. Los demás diseños continúan disponibles.</p></section>
+                    <section class="pro-card"><h3>Partida guardada en este dispositivo</h3><p>Guarda y recupera una partida local con marcador, bolas y turno actual.</p><div class="pro-actions"><button id="saveLocalMatch">Guardar partida</button><button id="loadLocalMatch" class="dark">Reanudar guardado</button><button id="deleteLocalMatch" class="dark">Borrar guardado</button></div><p class="pro-note" id="localMatchStatus"></p></section>
+                    <section class="pro-card"><h3>Logros locales</h3><p>Se desbloquean jugando y quedan guardados en este dispositivo.</p><div id="achievementSummary" class="pro-note"></div><div id="achievementList" class="achievement-list"></div></section>
+                    <section class="pro-card"><h3>Accesibilidad</h3><div class="access-options"><label><input type="checkbox" id="accessLargeText"> Texto más grande</label><label><input type="checkbox" id="accessContrast"> Alto contraste</label><label><input type="checkbox" id="accessReduceMotion"> Reducir animaciones</label></div><p class="pro-note">Los cambios se guardan localmente.</p></section>
+                    <section class="pro-card"><h3>Respaldo de datos</h3><p>Exporta o recupera estadísticas, torneo e historial en un archivo local.</p><div class="pro-actions"><button id="exportLocalData">Exportar respaldo</button><button id="importLocalDataBtn" class="dark">Importar respaldo</button><input id="importLocalDataFile" type="file" accept="application/json,.json" hidden></div></section>
+                    <section class="pro-card"><h3>Liga local todos-contra-todos</h3><p>Elige de 2 a 8 jugadores. El cuadro y los resultados se guardan en este dispositivo.</p><div class="tournament-players" id="tournamentPlayers"></div><div class="pro-actions"><button id="makeTournament">Crear fixture</button><button class="dark" id="clearTournament">Borrar liga</button></div><div id="tournamentArea"></div></section>
                 </div>
             </div>
         </div>
@@ -1870,13 +1953,20 @@
             c.height = 50 * DPR;
             });
             let balls = [], cue, potted = [];
-            const MODE_NAMES = {8: 'Bola 8', 9: 'Bola 9', 7: 'Bola 7', 10: 'Bola 10', 14: 'Pool continuo', 15: 'Rotación 61', 16: 'Banco'};
+            const MODE_NAMES = {8: 'Bola 8', 9: 'Bola 9', 7: 'Bola 7', 10: 'Bola 10', 14: 'Pool continuo', 15: 'Rotación 61', 16: 'Banco', 17: 'Práctica profesional', 18: 'Pool continuo 14.1', 19: 'One Pocket'};
             let mode = 8, modeScores = [0, 0];
+            let poolRaceTarget = 8, pool141Target = 50, bankRaceTarget = 5, onePocketRace = 8;
+            const onePocketTargets = [0, 3];
+            let bestOf = 1, activeBestOf = 1, seriesWins = [0, 0], matchComplete = false, matchLogged = false;
+            let shotClockSeconds = 0, clockRemaining = 0, lastClockAt = performance.now();
+            let consecutiveFouls = [0, 0], calledPocketIndex = null;
+            let drillType = "free", shotActor = 0, shotStartedOnBreak = false;
+            let replayFrames = [], lastReplay = [], replayCaptureTick = 0, replayPlayback = false, replayStartedAt = 0, priorUiState = false;
             let vsCpu = false, diff = 'normal';
             let player = 0, groups = [null, null], winner = - 1;
             let inHand = false, breakShot = true;
             let firstHit = null, railHit = false, shotPots = [], leftBefore = 99, lowBefore = 1;
-            let busy = false, gameOver = false, cuePending = false;
+            let busy = false, gameOver = false, cuePending = false, paused = false;
             let mouse = {x: W / 2, y: MIDY}, charging = false, downPos = null, hc = false;
             let lockedAim = {x: 1, y: 0}, power = 0;
             let uiOpen = true;
@@ -1887,7 +1977,7 @@
             let cueIdx = [0, 1], sprites = [null, null], cueStep = 0;
             let sinks = [], parts = [], maxV = 0, trailCol = null, trailTick = 0;
             let shotBanks = new Set();
-            let tableIdx = 0, tableLayer = null;
+            let tableIdx = 1, tableLayer = null;
             let bot = null, botT = 0;
             const isBot = p => vsCpu && p === 1;
             const pn = i => isBot(i) ? BOT_NAME : names[i];
@@ -1912,13 +2002,23 @@
             vsCpu = !!pr.cpu;
             if (DIFF_LABEL[pr.diff])
                     diff = pr.diff;
-            if (Number.isInteger(pr.table) && pr.table >= 0 && pr.table < 7)
+            if (pr.greenDefaultApplied && Number.isInteger(pr.table) && pr.table >= 0 && pr.table < 7)
                     tableIdx = pr.table;
+            else
+                    tableIdx = 1;
+            if ([1, 3, 5, 7].includes(+pr.bestOf))
+                    bestOf = +pr.bestOf;
+            if ([0, 30, 45, 60].includes(+pr.shotClockSeconds))
+                    shotClockSeconds = +pr.shotClockSeconds;
+            if ([5,8,10,15].includes(+pr.poolRaceTarget)) poolRaceTarget = +pr.poolRaceTarget;
+            if ([25,50,75,100,150].includes(+pr.pool141Target)) pool141Target = +pr.pool141Target;
+            if ([3,5,8,10].includes(+pr.bankRaceTarget)) bankRaceTarget = +pr.bankRaceTarget;
+            if ([5,6,7,8].includes(+pr.onePocketRace)) onePocketRace = +pr.onePocketRace;
             } catch (e) {
             }
             const savePrefs = () => {
             try {
-            localStorage.setItem('donpio_prefs', JSON.stringify({mode, cues: cueIdx, fx: spinOn, aim: aimOn, sfx: sfxOn, names, cpu: vsCpu, diff, table: tableIdx}));
+            localStorage.setItem('donpio_prefs', JSON.stringify({mode, cues: cueIdx, fx: spinOn, aim: aimOn, sfx: sfxOn, names, cpu: vsCpu, diff, table: tableIdx, greenDefaultApplied: true, bestOf, shotClockSeconds, poolRaceTarget, pool141Target, bankRaceTarget, onePocketRace}));
             } catch (e) {
             }
             };
@@ -1941,6 +2041,159 @@
             } catch (e) {
             }
             };
+            const PRO_DATA_KEY = "donpio_pro_data_v1";
+            const blankProStat = () => ({matches: 0, wins: 0, losses: 0, shots: 0, practiceShots: 0, pots: 0, fouls: 0, breakRuns: 0, bestRun: 0, run: 0});
+            let proStats = {}, matchHistory = [], localTournament = null;
+            const MATCH_SAVE_KEY = "donpio_match_checkpoint_v1", REPLAY_SAVE_KEY = "donpio_replay_library_v1", ACHIEVEMENT_KEY = "donpio_achievements_v1", ACCESS_KEY = "donpio_access_v1";
+            const ACHIEVEMENT_DEFS = [
+                {id:"debut", title:"Primer tiro", detail:"Completa tu primer golpe."},
+                {id:"break", title:"Saque con premio", detail:"Emboca una bola en el saque."},
+                {id:"run5", title:"Mano caliente", detail:"Emboca cinco bolas en una racha."},
+                {id:"firstMatch", title:"Primer encuentro", detail:"Completa un encuentro."},
+                {id:"fiveWins", title:"Jugador constante", detail:"Consigue cinco victorias locales."},
+                {id:"practice10", title:"Sesión de práctica", detail:"Completa diez tiros de entrenamiento."}
+            ];
+            let unlockedAchievements = [], savedReplays = [], accessPrefs = {largeText:false, highContrast:false, reduceMotion:false};
+            try { const a = JSON.parse(localStorage.getItem(ACHIEVEMENT_KEY) || "[]"); if (Array.isArray(a)) unlockedAchievements = a.filter(id => ACHIEVEMENT_DEFS.some(x => x.id === id)); } catch (e) {}
+            try { const a = JSON.parse(localStorage.getItem(REPLAY_SAVE_KEY) || "[]"); if (Array.isArray(a)) savedReplays = a.slice(0,5).filter(x => x && Array.isArray(x.frames)).map(x => ({id:String(x.id || Date.now()), date:String(x.date || "Repetición"), mode:MODE_NAMES[x.mode] ? +x.mode : 8, frames:x.frames.slice(0,180).filter(Array.isArray).map(f => f.slice(0,32).filter(q => q && Number.isFinite(+q.x) && Number.isFinite(+q.y)).map(q => ({n:Number.isInteger(+q.n) ? +q.n : null, x:+q.x, y:+q.y, on:!!q.on})))})); } catch (e) { savedReplays = []; }
+            try { const a = JSON.parse(localStorage.getItem(ACCESS_KEY) || "{}"); accessPrefs = {largeText:!!a.largeText, highContrast:!!a.highContrast, reduceMotion:!!a.reduceMotion}; } catch (e) {}
+            function sanitizeTournament(raw) {
+                if (!raw || !Array.isArray(raw.players) || !Array.isArray(raw.fixtures)) return null;
+                const players = [...new Set(raw.players.filter(n => ALL_NAMES.includes(n)))].slice(0, 8);
+                if (players.length < 2) return null;
+                const fixtures = raw.fixtures.filter(m => m && players.includes(m.a) && players.includes(m.b) && m.a !== m.b).slice(0, 28).map(m => ({a: m.a, b: m.b, winner: [m.a, m.b].includes(m.winner) ? m.winner : null}));
+                return {players, fixtures, created: String(raw.created || "").slice(0, 50)};
+            }
+            try { const savedPro = JSON.parse(localStorage.getItem(PRO_DATA_KEY) || "{}"); proStats = savedPro.stats && typeof savedPro.stats === "object" ? savedPro.stats : {}; matchHistory = Array.isArray(savedPro.history) ? savedPro.history.slice(0, 30).filter(m => m && typeof m === "object").map(m => ({date: String(m.date || "").replace(/[<>]/g, "").slice(0, 40), mode: Object.values(MODE_NAMES).includes(m.mode) ? m.mode : "Partida", winner: ALL_NAMES.includes(m.winner) || m.winner === BOT_NAME ? m.winner : "Jugador", score: String(m.score || "").replace(/[^0-9–-]/g, "").slice(0, 8)})) : []; localTournament = sanitizeTournament(savedPro.tournament); } catch (e) { proStats = {}; matchHistory = []; }
+            function statFor(name) { const raw = proStats[name] && typeof proStats[name] === "object" ? proStats[name] : {}, out = blankProStat(); for (const k of Object.keys(out)) out[k] = Number.isFinite(+raw[k]) ? Math.max(0, +raw[k]) : 0; return out; }
+            function saveProData() { try { localStorage.setItem(PRO_DATA_KEY, JSON.stringify({stats: proStats, history: matchHistory.slice(0, 30), tournament: localTournament})); } catch (e) {} }
+            function unlockAchievement(id) { if (unlockedAchievements.includes(id)) return; unlockedAchievements.push(id); try { localStorage.setItem(ACHIEVEMENT_KEY, JSON.stringify(unlockedAchievements)); } catch (e) {} }
+            function renderAchievements() {
+                const box = $("achievementList"), summary = $("achievementSummary"); if (!box || !summary) return;
+                summary.textContent = unlockedAchievements.length + " / " + ACHIEVEMENT_DEFS.length + " logros desbloqueados"; box.replaceChildren();
+                for (const a of ACHIEVEMENT_DEFS) { const row = document.createElement("div"), title = document.createElement("b"), detail = document.createElement("small"); row.className = "achievement-row" + (unlockedAchievements.includes(a.id) ? "" : " locked"); title.textContent = (unlockedAchievements.includes(a.id) ? "🏅 " : "🔒 ") + a.title; detail.textContent = a.detail; row.append(title, detail); box.append(row); }
+            }
+            function applyAccessPrefs() {
+                document.body.classList.toggle("access-large-text", accessPrefs.largeText); document.body.classList.toggle("access-high-contrast", accessPrefs.highContrast); document.body.classList.toggle("access-reduced-motion", accessPrefs.reduceMotion);
+                const map = [["accessLargeText","largeText"],["accessContrast","highContrast"],["accessReduceMotion","reduceMotion"]]; for (const [id,key] of map) { const el = $(id); if (el) el.checked = accessPrefs[key]; }
+            }
+            function saveAccessPrefs() { try { localStorage.setItem(ACCESS_KEY, JSON.stringify(accessPrefs)); } catch (e) {} applyAccessPrefs(); }
+            function updateLocalSaveStatus() {
+                let exists = false; try { exists = !!localStorage.getItem(MATCH_SAVE_KEY); } catch (e) {}
+                const load = $("loadLocalMatch"), del = $("deleteLocalMatch"), status = $("localMatchStatus"); if (load) load.disabled = !exists; if (del) del.disabled = !exists; if (status) status.textContent = exists ? "Hay una partida guardada en este dispositivo." : "Todavía no hay una partida guardada.";
+            }
+            function saveLocalMatch(silent) {
+                if (!balls.length || busy) { if (!silent) say("Espera a que las bolas se detengan para guardar."); return false; }
+                const data = {version:1, savedAt:new Date().toLocaleString("es-PE"), mode, names:names.slice(), vsCpu, diff, tableIdx, cueIdx:cueIdx.slice(), bestOf, activeBestOf, seriesWins:seriesWins.slice(), matchComplete, matchLogged, player, groups:groups.slice(), winner, inHand, breakShot, gameOver, modeScores:modeScores.slice(), consecutiveFouls:consecutiveFouls.slice(), calledPocketIndex, drillType, poolRaceTarget, pool141Target, bankRaceTarget, onePocketRace, clockRemaining, potted:potted.map(b => b.n), balls:balls.map(b => ({n:b.n,x:b.x,y:b.y,vx:b.vx,vy:b.vy,on:b.on,tray:!!b.tray,sv:b.sv,ss:b.ss,pocketIndex:Number.isInteger(b.pocketIndex)?b.pocketIndex:null}))};
+                try { localStorage.setItem(MATCH_SAVE_KEY, JSON.stringify(data)); updateLocalSaveStatus(); if (!silent) say("Partida guardada localmente."); return true; } catch (e) { if (!silent) say("No se pudo guardar: el almacenamiento local está lleno o desactivado."); return false; }
+            }
+            function loadLocalMatch() {
+                let d; try { d = JSON.parse(localStorage.getItem(MATCH_SAVE_KEY) || "null"); } catch (e) {}
+                if (!d || d.version !== 1 || !MODE_NAMES[d.mode] || !Array.isArray(d.balls)) { say("No hay una partida guardada válida."); updateLocalSaveStatus(); return; }
+                if (Array.isArray(d.names) && d.names.length === 2 && d.names.every(n => ALL_NAMES.includes(n)) && d.names[0] !== d.names[1]) names = d.names.slice();
+                mode = +d.mode; vsCpu = !!d.vsCpu; diff = ["facil","normal","dificil"].includes(d.diff) ? d.diff : "normal"; tableIdx = Number.isInteger(d.tableIdx) && d.tableIdx >= 0 && d.tableIdx < 7 ? d.tableIdx : 1; tableLayer = getTable(tableIdx);
+                if (Array.isArray(d.cueIdx)) d.cueIdx.slice(0,2).forEach((v,i) => { if (Number.isInteger(v) && v >= 0 && v < CUES.length && cueAllowed(v,names[i])) cueIdx[i] = v; });
+                [0,1].forEach(i => { sprites[i] = buildSprite(CUES[cueIdx[i]]); });
+                bestOf = [1,3,5,7].includes(+d.bestOf) ? +d.bestOf : 1; activeBestOf = [1,3,5,7].includes(+d.activeBestOf) ? +d.activeBestOf : bestOf;
+                seriesWins = Array.isArray(d.seriesWins) ? d.seriesWins.slice(0,2).map(x => Math.max(0,Math.floor(+x||0))) : [0,0]; matchComplete = !!d.matchComplete; matchLogged = !!d.matchLogged;
+                drillType=["free","break","control","bank","safety","straight","cut","carom"].includes(d.drillType)?d.drillType:"free";
+                newGame(); const byNum = new Map(balls.map(b => [b.n,b]));
+                for (const x of d.balls) { const b = byNum.get(+x.n); if (!b || !Number.isFinite(+x.x) || !Number.isFinite(+x.y)) continue; b.x=+x.x; b.y=+x.y; b.vx=Number.isFinite(+x.vx)?+x.vx:0; b.vy=Number.isFinite(+x.vy)?+x.vy:0; b.on=!!x.on; b.tray=!!x.tray; b.sv=Number.isFinite(+x.sv)?+x.sv:0; b.ss=Number.isFinite(+x.ss)?+x.ss:0; b.pocketIndex=Number.isInteger(x.pocketIndex)?x.pocketIndex:null; }
+                cue = byNum.get(0) || cue; potted = Array.isArray(d.potted) ? d.potted.map(n => byNum.get(+n)).filter(Boolean) : []; shotPots=[]; player=d.player===1?1:0; groups=Array.isArray(d.groups)?d.groups.slice(0,2):[null,null]; inHand=!!d.inHand; breakShot=!!d.breakShot; gameOver=!!d.gameOver; winner=d.winner===0||d.winner===1?d.winner:-1; modeScores=Array.isArray(d.modeScores)?d.modeScores.slice(0,2).map(x=>Math.max(0,+x||0)):[0,0]; consecutiveFouls=Array.isArray(d.consecutiveFouls)?d.consecutiveFouls.slice(0,2).map(x=>Math.max(0,+x||0)):[0,0]; poolRaceTarget=[5,8,10,15].includes(+d.poolRaceTarget)?+d.poolRaceTarget:8; pool141Target=[25,50,75,100,150].includes(+d.pool141Target)?+d.pool141Target:50; bankRaceTarget=[3,5,8,10].includes(+d.bankRaceTarget)?+d.bankRaceTarget:5; onePocketRace=[5,6,7,8].includes(+d.onePocketRace)?+d.onePocketRace:8; calledPocketIndex=Number.isInteger(d.calledPocketIndex)&&d.calledPocketIndex>=0&&d.calledPocketIndex<6?d.calledPocketIndex:null; drillType=["free","break","control","bank","safety","straight","cut","carom"].includes(d.drillType)?d.drillType:"free";
+                busy=false; paused=false; replayPlayback=false; sinks=[]; parts=[]; clockRemaining=shotClockSeconds; lastClockAt=performance.now(); pickMode(mode); savePrefs(); closeProPanel(); show(null); hud(); draw(); say("Partida local recuperada" + (d.savedAt ? " · guardada " + d.savedAt : "") + "."); updateLocalSaveStatus(); if (gameOver) setTimeout(openWin,100);
+            }
+            function clearLocalMatch() { try { localStorage.removeItem(MATCH_SAVE_KEY); } catch (e) {} updateLocalSaveStatus(); say("Guardado local eliminado."); }
+            function exportLocalData() {
+                const data={version:1,exportedAt:new Date().toISOString(),scores,stats:proStats,history:matchHistory,tournament:localTournament,achievements:unlockedAchievements,accessibility:accessPrefs,replays:savedReplays};
+                const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="don-pio-billar-respaldo.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+            }
+            function importLocalDataFile(file) {
+                if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const d=JSON.parse(String(reader.result||""));if(!d||d.version!==1)throw Error("Formato no reconocido");if(!confirm("Importar el respaldo reemplazará estadísticas, historial, torneo y logros locales actuales. ¿Continuar?"))return;
+                    proStats=d.stats&&typeof d.stats==="object"?d.stats:{};matchHistory=Array.isArray(d.history)?d.history.slice(0,30).filter(x=>x&&typeof x==="object").map(x=>({date:String(x.date||"").replace(/[<>]/g,"").slice(0,40),mode:Object.values(MODE_NAMES).includes(x.mode)?x.mode:"Partida",winner:ALL_NAMES.includes(x.winner)||x.winner===BOT_NAME?x.winner:"Jugador",score:String(x.score||"").replace(/[^0-9–-]/g,"").slice(0,8)})):[];localTournament=sanitizeTournament(d.tournament);
+                    if(d.scores&&typeof d.scores==="object")ALL_NAMES.forEach(n=>scores[n]=Math.max(0,Math.floor(+d.scores[n]||0)));saveScores();unlockedAchievements=Array.isArray(d.achievements)?d.achievements.filter(id=>ACHIEVEMENT_DEFS.some(a=>a.id===id)):[];localStorage.setItem(ACHIEVEMENT_KEY,JSON.stringify(unlockedAchievements));
+                    if(d.accessibility&&typeof d.accessibility==="object"){accessPrefs={largeText:!!d.accessibility.largeText,highContrast:!!d.accessibility.highContrast,reduceMotion:!!d.accessibility.reduceMotion};localStorage.setItem(ACCESS_KEY,JSON.stringify(accessPrefs));applyAccessPrefs();}
+                    if(Array.isArray(d.replays)){savedReplays=d.replays.slice(0,5).filter(x=>x&&Array.isArray(x.frames));localStorage.setItem(REPLAY_SAVE_KEY,JSON.stringify(savedReplays));}saveProData();renderProPanel();renderBoards();say("Respaldo local importado.");
+                }catch(e){alert("No se pudo importar el respaldo. Verifica que sea un archivo Don Pío válido.");}};reader.readAsText(file);
+            }
+            function renderSavedReplays() {
+                const box=$("savedReplayList"); if(!box) return; box.replaceChildren();
+                if(!savedReplays.length){const p=document.createElement("p");p.textContent="Aún no hay repeticiones guardadas.";box.append(p);return;}
+                for(const item of savedReplays){const row=document.createElement("div"),label=document.createElement("span"),play=document.createElement("button"),del=document.createElement("button");row.className="pro-history-row";label.textContent=(MODE_NAMES[item.mode]||"Partida")+" · "+item.date;play.textContent="Ver";del.textContent="Borrar";del.className="dark";play.addEventListener("click",()=>{if(busy){say("Espera a que termine el tiro actual.");return;}paused=false;$("pauseGame").textContent="⏸ Pausa";lastReplay=item.frames;replayPlayback=true;replayStartedAt=performance.now();closeProPanel();say("Reproduciendo repetición guardada. Pulsa Escape para cerrar.");});del.addEventListener("click",()=>{savedReplays=savedReplays.filter(x=>x.id!==item.id);try{localStorage.setItem(REPLAY_SAVE_KEY,JSON.stringify(savedReplays));}catch(e){}renderSavedReplays();});row.append(label,play,del);box.append(row);}
+            }
+            function saveCurrentReplay() {
+                if(lastReplay.length<2){say("Termina un tiro antes de guardar una repetición.");return;}
+                savedReplays.unshift({id:Date.now()+"-"+Math.random().toString(36).slice(2,7),date:new Date().toLocaleString("es-PE"),mode,frames:JSON.parse(JSON.stringify(lastReplay))});savedReplays=savedReplays.slice(0,5);
+                try{localStorage.setItem(REPLAY_SAVE_KEY,JSON.stringify(savedReplays));renderSavedReplays();say("Repetición guardada en la biblioteca local.");}catch(e){savedReplays.shift();say("No se pudo guardar la repetición: almacenamiento local lleno.");}
+            }
+            function recordShotResult() {
+                if (shotActor < 0 || shotActor > 1) return;
+                const st = statFor(pn(shotActor)); st.shots++; st.pots += shotPots.length;
+                if (inHand) { st.fouls++; st.run = 0; } else if (shotPots.length) { st.run += shotPots.length; st.bestRun = Math.max(st.bestRun, st.run); } else st.run = 0;
+                if (shotStartedOnBreak && !inHand && shotPots.length) st.breakRuns++;
+                if (mode === 17) st.practiceShots++;
+                if (st.shots >= 1) unlockAchievement("debut"); if (st.bestRun >= 5) unlockAchievement("run5"); if (shotStartedOnBreak && !inHand && shotPots.length) unlockAchievement("break"); if (st.practiceShots >= 10) unlockAchievement("practice10");
+                proStats[pn(shotActor)] = st; saveProData();
+            }
+            function recordProMatch() {
+                if (matchLogged || winner < 0) return; matchLogged = true;
+                const winName = pn(winner), loseName = pn(1 - winner), winStat = statFor(winName), loseStat = statFor(loseName);
+                winStat.matches++; winStat.wins++; loseStat.matches++; loseStat.losses++; proStats[winName] = winStat; proStats[loseName] = loseStat;
+                unlockAchievement("firstMatch"); if (winStat.wins >= 5) unlockAchievement("fiveWins");
+                if (localTournament) { const fixture = localTournament.fixtures.find(m => !m.winner && ((m.a === winName && m.b === loseName) || (m.b === winName && m.a === loseName))); if (fixture) fixture.winner = winName; }
+                matchHistory.unshift({date: new Date().toLocaleString("es-PE"), mode: MODE_NAMES[mode], winner: winName, score: seriesWins[0] + "–" + seriesWins[1]});
+                matchHistory = matchHistory.slice(0, 30); saveProData();
+            }
+            function renderTournament() {
+                const box = $("tournamentPlayers"), area = $("tournamentArea"); if (!box || !area) return;
+                const selected = localTournament ? localTournament.players : [names[0], names[1]].filter(n => ALL_NAMES.includes(n));
+                box.innerHTML = ALL_NAMES.map(n => "<label><input type=checkbox value=" + n + (selected.includes(n) ? " checked" : "") + ">" + n + "</label>").join("");
+                if (!localTournament || !Array.isArray(localTournament.fixtures)) { area.innerHTML = ""; return; }
+                const table = Object.fromEntries(localTournament.players.map(n => [n, {played: 0, wins: 0, losses: 0, points: 0}]));
+                for (const m of localTournament.fixtures) if (m.winner && table[m.a] && table[m.b]) {
+                    table[m.a].played++; table[m.b].played++;
+                    const loser = m.winner === m.a ? m.b : m.a; table[m.winner].wins++; table[m.winner].points += 3; table[loser].losses++;
+                }
+                const standings = Object.entries(table).sort((a, b) => b[1].points - a[1].points || b[1].wins - a[1].wins || a[0].localeCompare(b[0]));
+                let html = "<p class=pro-note>" + localTournament.fixtures.filter(m => m.winner).length + " / " + localTournament.fixtures.length + " partidos registrados · victoria = 3 puntos.</p>";
+                html += "<div class=tourney-lines><b>Clasificación</b>" + standings.map(([n, x], i) => "<div class=tourney-row><span>" + (i + 1) + ". " + n + " · " + x.played + " PJ · " + x.wins + " G · " + x.losses + " P</span><b>" + x.points + " pts</b></div>").join("") + "</div>";
+                html += "<div class=tourney-lines><b>Fixture · juega la partida o registra el resultado</b>";
+                html += localTournament.fixtures.map((m, i) => "<div class=tourney-row><span>" + m.a + " vs " + m.b + (m.winner ? " · ganó " + m.winner : "") + "</span><span><button class=dark data-play-fixture=" + i + ">Jugar</button> <select data-fixture=" + i + "><option value=''>Pendiente</option><option value=" + m.a + (m.winner === m.a ? " selected" : "") + ">" + m.a + "</option><option value=" + m.b + (m.winner === m.b ? " selected" : "") + ">" + m.b + "</option></select></span></div>").join("");
+                html += "</div>"; area.innerHTML = html;
+                area.querySelectorAll("[data-fixture]").forEach(el => el.addEventListener("change", () => {
+                    const m = localTournament.fixtures[+el.dataset.fixture];
+                    m.winner = [m.a, m.b].includes(el.value) ? el.value : null;
+                    saveProData(); renderTournament();
+                }));
+                area.querySelectorAll("[data-play-fixture]").forEach(el => el.addEventListener("click", () => {
+                    const m = localTournament.fixtures[+el.dataset.playFixture]; names = [m.a, m.b]; vsCpu = false;
+                    seriesWins = [0, 0]; activeBestOf = bestOf; matchComplete = false; matchLogged = false;
+                    [0, 1].forEach(i => { if (!cueAllowed(cueIdx[i], names[i])) cueIdx[i] = i; sprites[i] = buildSprite(CUES[cueIdx[i]]); });
+                    savePrefs(); closeProPanel(); newGame(); show(null);
+                    say("Liga local · " + names[0] + " contra " + names[1] + " · " + MODE_NAMES[mode] + ".");
+                }));
+            }
+            function renderProPanel() {
+                const best = $("bestOfSelect"), clock = $("shotClockSelect"); if (best) best.value = String(bestOf); if (clock) clock.value = String(shotClockSeconds);
+                $("poolRaceTarget").value=String(poolRaceTarget); $("pool141Target").value=String(pool141Target); $("bankRaceTarget").value=String(bankRaceTarget); $("onePocketRace").value=String(onePocketRace);
+                const namesNow = [names[0], isBot(1) ? BOT_NAME : names[1]], labels = ["Partidas", "Victorias", "Derrotas", "Tiros", "Tiros de práctica", "Bolas / tiro", "Faltas", "Mejor serie", "Break con bola", "Bolas embocadas"], values = [];
+                for (const n of namesNow) {
+                    const st = statFor(n), perShot = st.shots ? (st.pots / st.shots).toFixed(2) : "0.00", nums = [st.matches, st.wins, st.losses, st.shots, st.practiceShots, perShot, st.fouls, st.bestRun, st.breakRuns, st.pots];
+                    values.push("<div class=pro-stat><b>" + n + "</b></div>");
+                    labels.forEach((label, i) => values.push("<div class=pro-stat>" + label + "<b>" + nums[i] + "</b></div>"));
+                }
+                $("proStats").innerHTML = values.join("");
+                const history = $("proHistory"); if (history && !history.hidden) history.innerHTML = matchHistory.length ? matchHistory.map(m => "<div class=pro-history-row><span>" + m.date + " · " + m.mode + "</span><b>" + m.winner + " · " + m.score + "</b></div>").join("") : "<p>Aún no hay partidas completadas.</p>";
+                $("lastReplay").disabled = lastReplay.length < 2;
+                renderTournament(); renderSavedReplays(); renderAchievements(); updateLocalSaveStatus();
+                $("seriesBadge").textContent = "SERIE " + seriesWins[0] + "–" + seriesWins[1] + " · " + activeBestOf; updateClockBadge();
+            }
+            function renderCallPocket() {
+                const wrap = $("callPocketWrap"), select = $("calledPocket"); if (!wrap || !select) return;
+                wrap.hidden = mode !== 8 && mode !== 10;
+                $("callPocketLabel").textContent = mode === 10 ? "Tronera cantada · bola 10" : "Tronera cantada · bola 8";
+                select.value = calledPocketIndex === null ? "" : String(calledPocketIndex);
+            }
+            function updateClockBadge() { const el = $("clockBadge"); if (!el) return; el.textContent = shotClockSeconds ? "⏱ " + Math.max(0, Math.ceil(clockRemaining)) + " s" : "⏱ LIBRE"; el.classList.toggle("urgent", !!shotClockSeconds && clockRemaining <= 10); }
             function renderBoards(flashName) {
             const max = Math.max(0, ...ALL_NAMES.map(n => scores[n]));
             const rows = list => list.map(n => {
@@ -1971,7 +2224,7 @@
             const say = t => {
             $msg.textContent = t;
             };
-            const canShoot = () => cue.on && !busy && !gameOver && !inHand && !uiOpen;
+            const canShoot = () => cue.on && !busy && !gameOver && !inHand && !uiOpen && !replayPlayback && !paused;
             const typeOf = n => n === 8 ? 'ocho' : n < 8 ? 'lisas' : 'rayadas';
             const left = g => balls.filter(b => b.on && b.n && typeOf(b.n) === g).length;
             const lowest = () => balls.reduce((m, b) => (b.on && b.n && b.n < m) ? b.n : m, 99);
@@ -2699,21 +2952,33 @@
             info = i === player && !gameOver ? 'Bola objetivo: ' + (l === 99 ? '—' : l) : 'En espera';
             if (mode === 15)
                     info = modeScores[i] + ' / 61 puntos · ' + (i === player && !gameOver ? 'objetivo ' + (l === 99 ? '—' : l) : 'en espera');
+            else if (mode === 9)
+                    info = (i === player && !gameOver ? 'Bola objetivo: ' + (l === 99 ? '—' : l) + ' · faltas ' + consecutiveFouls[i] + '/3' : 'Faltas consecutivas: ' + consecutiveFouls[i] + '/3');
             } else if (mode === 14)
-                    info = modeScores[i] + ' / 8 puntos';
+                    info = modeScores[i] + ' / ' + poolRaceTarget + ' puntos';
+            else if (mode === 16)
+                    info = modeScores[i] + ' / ' + bankRaceTarget + ' bolas a banda';
+            else if (mode === 18)
+                    info = modeScores[i] + ' / ' + pool141Target + ' puntos · rack 14.1';
+            else if (mode === 19)
+                    info = modeScores[i] + ' / ' + onePocketRace + ' · tronera ' + (i === 0 ? 'sup. izq.' : 'inf. der.');
             else
-                    info = modeScores[i] + ' / 5 bolas a banda';
+                    info = 'Práctica libre · ' + modeScores[i] + ' tiros';
             const nm = isBot(i) ? '🤖 ' + BOT_NAME + ' (' + DIFF_LABEL[diff] + ')' : names[i];
             $p[i].innerHTML = 'Jugador ' + (i + 1) + ' · ' + nm + '<b>' + info + '</b>';
             $p[i].classList.toggle('on', i === player && winner < 0);
             }
             drawIcons();
+            updateClockBadge();
+            renderCallPocket();
             }
 
             /* ============================================================
              JUEGO: inicio y reinicio
              ============================================================ */
             function newGame() {
+            replayPlayback = false; paused = false; const pauseBtn = $("pauseGame"); if (pauseBtn) pauseBtn.textContent = "⏸ Pausa"; clockRemaining = shotClockSeconds; lastClockAt = performance.now();
+            consecutiveFouls = [0, 0]; calledPocketIndex = null;
             pickSet();
             modeScores = [0, 0];
             iconCache = {};
@@ -2767,10 +3032,30 @@
             const rest = shuffled([2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14]);
             addRows([[1], [rest[0], rest[1]], [rest[2], 8, rest[3]], [rest[4], rest[5], rest[6], rest[7]], [rest[8], rest[9], 15, rest[10], rest[11]]]);
             }
+            if (mode === 17) applyDrillLayout();
             hud();
-            say(MODE_NAMES[mode] + ' · Turno de ' + pn(0) + ' (saque). Apunta con el ratón, mantén y arrastra desde la blanca para cargar fuerza; suelta para tirar.');
+            say(mode === 17 ? drillMessage() : MODE_NAMES[mode] + ' · Turno de ' + pn(0) + ' (saque). Apunta con el ratón, mantén y arrastra desde la blanca para cargar fuerza; suelta para tirar.');
+            saveLocalMatch(true);
             }
 
+            function drillMessage() {
+                const guide = {free: "Mesa libre: practica cualquier tiro.", break: "Rompimiento: busca un saque potente y controla la blanca.", control: "Control de blanca: intenta dejarla preparada para el siguiente tiro.", bank: "Tiro de banda: practica el rebote antes de embocar.", safety: "Juego defensivo: busca una posición que limite el tiro rival.", straight: "Tiro recto: centra el contacto y controla la velocidad.", cut: "Tiro de corte: practica el ángulo de entrada.", carom: "Combinación: golpea una bola para mover otra hacia el objetivo."};
+                return "🎓 ENTRENAMIENTO · " + (guide[drillType] || guide.free) + " · Pulsa Competición para cambiar de ejercicio.";
+            }
+            function applyDrillLayout() {
+                if (drillType === "break") return;
+                for (const b of balls) if (b.n > 1) b.on = false;
+                const one = balls.find(b => b.n === 1), two = balls.find(b => b.n === 2);
+                if (!one) return;
+                if (drillType === "bank") { placeAt(cue, X0 + 235, Y1 - 95); placeAt(one, X1 - 100, Y0 + 92); }
+                else if (drillType === "control") { placeAt(cue, X0 + 250, MIDY); placeAt(one, MIDX + 65, MIDY); }
+                else if (drillType === "safety") { placeAt(cue, X0 + 230, MIDY + 70); placeAt(one, MIDX - 25, MIDY); if (two) { two.on = true; placeAt(two, MIDX + 35, MIDY); } }
+                else if (drillType === "straight") { placeAt(cue, X0 + 265, MIDY); placeAt(one, MIDX + 35, MIDY); }
+                else if (drillType === "cut") { placeAt(cue, X0 + 270, MIDY + 90); placeAt(one, MIDX + 70, MIDY - 35); }
+                else if (drillType === "carom") { placeAt(cue, X0 + 230, MIDY); placeAt(one, MIDX - 10, MIDY); if (two) { two.on = true; placeAt(two, MIDX + 42, MIDY - 8); } }
+                else { placeAt(cue, X0 + 240, MIDY); placeAt(one, MIDX + 90, MIDY); }
+                potted = []; shotPots = [];
+            }
             function placeAt(bl, hx, hy) {
             let x = hx, y = hy;
             for (let k = 0; k < 60; k++) {
@@ -2833,8 +3118,14 @@
             parts.push({ring: true, x: p.x, y: p.y, life: 0, max: 34, r: p.r * .9, col: [255, 213, 120]});
             }
 
+            function pocketIndexAt(x, y) {
+                let idx = 0, best = Infinity;
+                POCKETS.forEach((p, i) => { const d = (x - p.x) ** 2 + (y - p.y) ** 2; if (d < best) { best = d; idx = i; } });
+                return idx;
+            }
             function pot(b) {
             b.on = false;
+            b.pocketIndex = pocketIndexAt(b.x, b.y);
             startSink(b);
             b.vx = b.vy = 0;
             SFX.pocket();
@@ -3035,6 +3326,8 @@
                     loss = 'metió la 8 antes de despejar su grupo';
             else if (foul)
                     loss = 'metió la 8 cometiendo falta';
+            else if (calledPocketIndex === null || eightIn.pocketIndex !== calledPocketIndex)
+                    loss = 'metió la 8 en una tronera distinta a la cantada';
             gameOver = true;
             winner = loss ? opp : me;
             }
@@ -3070,6 +3363,7 @@
                     foul = `debía tocar primero la bola ${lowBefore}`;
             else if (!shotPots.length && !railHit)
                     foul = 'ninguna bola tocó banda tras el contacto';
+            consecutiveFouls[me] = foul ? consecutiveFouls[me] + 1 : 0;
             if (nine && !foul) {
             gameOver = true;
             winner = me;
@@ -3081,6 +3375,11 @@
             shotPots = shotPots.filter(b => b !== nine);
             placeAt(nine, X0 + 675, MIDY);
             }
+            if (consecutiveFouls[me] >= 3) {
+                gameOver = true; winner = opp; inHand = true; player = opp;
+                say('🏆 ' + pn(opp) + ' gana: ' + pn(me) + ' cometió tres faltas consecutivas.');
+                return;
+            }
             const again = !foul && shotPots.length > 0;
             if (!again)
                     player = opp;
@@ -3089,9 +3388,22 @@
                     : again ? `¡Bien! ${pn(me)} sigue tirando.` : `Turno de ${pn(player)}.`);
             }
 
+            function rerackFourteenOne() {
+                const rackBalls = balls.filter(b => b.n && !b.on);
+                const rows = [1, 2, 3, 4, 5], dx = 2 * R * Math.cos(Math.PI / 6) + .6, dy = 2 * R + .6;
+                let idx = 0; const fx = X0 + 675;
+                for (let row = 0; row < rows.length && idx < rackBalls.length; row++) {
+                    for (let col = 0; col < rows[row] && idx < rackBalls.length; col++) {
+                        const b = rackBalls[idx++]; b.x = fx + row * dx; b.y = MIDY + (col - (rows[row] - 1) / 2) * dy;
+                        b.vx = b.vy = 0; b.on = true; b.tray = false;
+                    }
+                }
+                potted = potted.filter(b => b.n === 0 || b.on);
+                say("Pool continuo: rack rearmado con " + rackBalls.length + " bolas; continúa el juego.");
+            }
             function endTurnVariants() {
             const me = player, opp = 1 - me;
-            let foul = '';
+            let foul = '', callMiss = false;
             if (cuePending) {
             placeAt(cue, X0 + 225, MIDY);
             cuePending = false;
@@ -3113,8 +3425,15 @@
             placeAt(b, X0 + 675, MIDY);
             }
             }
-            if (!foul && (mode === 14 || mode === 16))
-                    modeScores[me] += mode === 14 ? shotPots.length : shotPots.filter(b => shotBanks.has(b.n)).length;
+            if (!foul && (mode === 14 || mode === 16 || mode === 18))
+                    modeScores[me] += mode === 16 ? shotPots.filter(b => shotBanks.has(b.n)).length : shotPots.length;
+            let onePocketWinner = -1;
+            if (!foul && mode === 19) {
+                for (const b of shotPots) {
+                    const owner = onePocketTargets.indexOf(b.pocketIndex);
+                    if (owner >= 0) { modeScores[owner]++; if (modeScores[owner] >= onePocketRace && onePocketWinner < 0) onePocketWinner = owner; }
+                }
+            }
             if (!foul && mode === 15)
                     modeScores[me] += shotPots.reduce((sum, b) => sum + b.n, 0);
             if (mode === 7 || mode === 10) {
@@ -3125,43 +3444,76 @@
             shotPots = shotPots.filter(b => b !== targetBall);
             targetBall.tray = false;
             placeAt(targetBall, X0 + 675, MIDY);
+            } else if (mode === 10 && (calledPocketIndex === null || targetBall.pocketIndex !== calledPocketIndex)) {
+            potted = potted.filter(b => b !== targetBall);
+            shotPots = shotPots.filter(b => b !== targetBall);
+            targetBall.tray = false;
+            placeAt(targetBall, X0 + 675, MIDY);
+            callMiss = true;
             } else {
             gameOver = true;
             winner = me;
             }
             }
-            } else if (!foul && mode === 14 && modeScores[me] >= 8) {
+            } else if (!foul && mode === 14 && modeScores[me] >= poolRaceTarget) {
             gameOver = true;
             winner = me;
+            } else if (!foul && mode === 18 && modeScores[me] >= pool141Target) {
+            gameOver = true;
+            winner = me;
+            } else if (!foul && mode === 19 && onePocketWinner >= 0) {
+            gameOver = true;
+            winner = onePocketWinner;
             } else if (!foul && mode === 15 && modeScores[me] >= 61) {
             gameOver = true;
             winner = me;
-            } else if (!foul && mode === 16 && modeScores[me] >= 5) {
+            } else if (!foul && mode === 16 && modeScores[me] >= bankRaceTarget) {
             gameOver = true;
             winner = me;
             }
+            if (mode === 18 && !gameOver && balls.filter(b => b.n && b.on).length <= 1 && balls.filter(b => b.n && !b.on).length >= 14)
+                    rerackFourteenOne();
             if (gameOver) {
             say('🏆 ¡Gana ' + pn(winner) + '! ' + MODE_NAMES[mode] + '.');
             return;
             }
-            const scored = mode === 16 ? shotPots.some(b => shotBanks.has(b.n)) : shotPots.length > 0;
+            const scored = !callMiss && (mode === 16 ? shotPots.some(b => shotBanks.has(b.n)) : mode === 19 ? shotPots.some(b => b.pocketIndex === onePocketTargets[me]) : shotPots.length > 0);
             if (foul || !scored)
                     player = opp;
             inHand = !!foul;
-            say(foul ? 'Falta de ' + pn(me) + ': ' + foul + '. ' + pn(opp) + ': ' + (isBot(opp) ? 'la computadora coloca la blanca.' : 'haz clic para colocar la blanca donde quieras.')
+            if (callMiss) say('La 10 entró en otra tronera: se repone y termina el turno.');
+            else say(foul ? 'Falta de ' + pn(me) + ': ' + foul + '. ' + pn(opp) + ': ' + (isBot(opp) ? 'la computadora coloca la blanca.' : 'haz clic para colocar la blanca donde quieras.')
                     : scored ? '¡Bien! ' + pn(me) + ' sigue tirando · ' + modeScores[me] + ' puntos.' : 'Turno de ' + pn(player) + '.');
             }
 
+            function endTurnPractice() {
+                const me = player, opp = 1 - me; modeScores[me]++;
+                if (cuePending) { placeAt(cue, X0 + 225, MIDY); cuePending = false; inHand = true; player = opp; say("Falta en práctica: blanca en mano para " + pn(player) + "."); }
+                else if (shotPots.length) { inHand = false; say("Práctica · " + pn(me) + " puede continuar. Bolas embocadas: " + shotPots.length + "."); }
+                else { inHand = false; player = opp; say("Práctica · turno de " + pn(player) + "."); }
+            }
             function endTurn() {
             trailCol = null;
-            if (mode === 8)
+            if (replayFrames.length) { replayFrames.push(captureReplayFrame()); lastReplay = replayFrames.slice(-180); replayFrames = []; }
+            if (mode === 17)
+                    endTurnPractice();
+            else if (mode === 8)
                     endTurn8();
             else if (mode === 9)
                     endTurn9();
             else
                     endTurnVariants();
+            recordShotResult();
+            if (gameOver && winner >= 0) {
+                seriesWins[winner]++;
+                matchComplete = seriesWins[winner] >= Math.ceil(activeBestOf / 2);
+                if (matchComplete) recordProMatch();
+                else say("🏁 " + pn(winner) + " gana este juego · Serie " + seriesWins[0] + "–" + seriesWins[1] + ". Sigue la partida.");
+            }
+            clockRemaining = shotClockSeconds; lastClockAt = performance.now();
+            calledPocketIndex = null;
             breakShot = false;
-            hud();
+            hud(); saveLocalMatch(true);
             if (gameOver) {
             SFX.win();
             setTimeout(openWin, 1100);
@@ -3169,6 +3521,7 @@
                     SFX.foul();
             }
 
+            function captureReplayFrame() { return balls.map(b => ({n:b.n, x: b.x, y: b.y, on: !!b.on})); }
             function update() {
             maxV = 0;
             if (!busy)
@@ -3209,6 +3562,7 @@
             // estela de fuego del taco premium
             if (trailCol && cue.on && Math.hypot(cue.vx, cue.vy) > 1 && parts.length < 150 && (++trailTick % 2 === 0))
                     parts.push({x: cue.x + (Math.random() - .5) * 6, y: cue.y + (Math.random() - .5) * 6, vx: (Math.random() - .5) * .8, vy: (Math.random() - .5) * .8 - .2, life: 0, max: 13 + Math.random() * 10, col: trailCol, r: 1.2 + Math.random() * 1.8});
+            if (++replayCaptureTick % 4 === 0 && replayFrames.length < 180) replayFrames.push(captureReplayFrame());
             if (!balls.some(b => b.on && (b.vx || b.vy)) && !sinks.length) {
             busy = false;
             endTurn();
@@ -3251,6 +3605,9 @@
             }
 
             function shoot(byBot) {
+            shotActor = player; shotStartedOnBreak = breakShot;
+            replayFrames = [captureReplayFrame()]; replayCaptureTick = 0;
+            clockRemaining = shotClockSeconds;
             const a = lockedAim, sp = power * MAX_SPEED;
             cue.vx = a.x * sp;
             cue.vy = a.y * sp;
@@ -3349,7 +3706,7 @@
             return !balls.some(b => b.on && b !== i1 && b !== i2 && segDist(b.x, b.y, x0, y0, x1, y1) < 2 * R - 1);
             }
             function legalTargets() {
-            if (mode === 14 || mode === 16)
+            if (mode === 14 || mode === 16 || mode === 18 || mode === 19)
                     return balls.filter(b => b.on && b.n);
             if (mode === 9 || mode === 7 || mode === 10 || mode === 15) {
             const l = lowest();
@@ -3364,8 +3721,9 @@
             }
             function evalShots(cx, cy) {
             const out = [];
+            const pocketOptions = mode === 19 ? [POCKETS[onePocketTargets[player]]] : POCKETS;
             for (const t of legalTargets())
-                    for (const p of POCKETS) {
+                    for (const p of pocketOptions) {
             const dx = p.x - t.x, dy = p.y - t.y, d = Math.hypot(dx, dy);
             if (d < 1)
                     continue;
@@ -3659,10 +4017,17 @@
             });
             window.addEventListener('keydown', e => {
             if (e.key === 'Escape') {
-            if (hc)
-                    cancelCharge();
+            if (hc) cancelCharge();
+            if (replayPlayback) replayPlayback = false;
+            if ($("proModal").classList.contains("open")) closeProPanel();
+            else if (paused) togglePause();
             } else if (e.key === 'h' || e.key === 'H')
                     setAim(!aimOn);
+            else if ((e.key === "ArrowLeft" || e.key === "ArrowRight") && canShoot() && !(e.target && e.target.closest && e.target.closest("input,select,textarea"))) {
+                const a = aimDir(), step = e.shiftKey ? Math.PI / 1800 : Math.PI / 360;
+                const ang = Math.atan2(a.y, a.x) + (e.key === "ArrowLeft" ? -step : step);
+                mouse = {x: cue.x + Math.cos(ang) * 100, y: cue.y + Math.sin(ang) * 100}; e.preventDefault();
+            }
             });
             $('reset').addEventListener('click', () => {
             if (!uiOpen)
@@ -3781,6 +4146,75 @@
                     cancelCharge();
             }
 
+            function togglePause() {
+                if (uiOpen || gameOver || replayPlayback) return; paused = !paused;
+                const b = $("pauseGame"); if (b) b.textContent = paused ? "▶ Reanudar" : "⏸ Pausa";
+                if (!paused) { last = performance.now(); lastClockAt = last; } else { SFX.roll(0); }
+                say(paused ? "⏸ Partida en pausa." : "▶ Partida reanudada.");
+            }
+            function openProPanel() {
+                priorUiState = uiOpen; uiOpen = true; cancelCharge();
+                $("proModal").classList.add("open"); $("proModal").setAttribute("aria-hidden", "false"); renderProPanel();
+            }
+            function closeProPanel() {
+                $("proModal").classList.remove("open"); $("proModal").setAttribute("aria-hidden", "true");
+                uiOpen = priorUiState; priorUiState = false;
+            }
+            function startDrill(kind) {
+                drillType = kind; mode = 17; vsCpu = false; activeBestOf = 1; seriesWins = [0, 0]; matchComplete = false; matchLogged = false;
+                pickMode(17); closeProPanel(); newGame(); show(null);
+            }
+            $("proBtn").addEventListener("click", openProPanel);
+            $("pauseGame").addEventListener("click", togglePause);
+            $("saveLocalMatch").addEventListener("click", () => saveLocalMatch(false));
+            $("loadLocalMatch").addEventListener("click", loadLocalMatch);
+            $("deleteLocalMatch").addEventListener("click", () => { if (confirm("¿Borrar la partida guardada en este dispositivo?")) clearLocalMatch(); });
+            $("saveCurrentReplay").addEventListener("click", saveCurrentReplay);
+            $("exportLocalData").addEventListener("click", exportLocalData);
+            $("importLocalDataBtn").addEventListener("click", () => $("importLocalDataFile").click());
+            $("importLocalDataFile").addEventListener("change", e => { importLocalDataFile(e.target.files && e.target.files[0]); e.target.value=""; });
+            $("accessLargeText").addEventListener("change", e => { accessPrefs.largeText=e.target.checked; saveAccessPrefs(); });
+            $("accessContrast").addEventListener("change", e => { accessPrefs.highContrast=e.target.checked; saveAccessPrefs(); });
+            $("accessReduceMotion").addEventListener("change", e => { accessPrefs.reduceMotion=e.target.checked; saveAccessPrefs(); });
+            applyAccessPrefs(); updateLocalSaveStatus(); renderSavedReplays();
+            $("closePro").addEventListener("click", closeProPanel);
+            $("proModal").addEventListener("click", e => { if (e.target === $("proModal")) closeProPanel(); });
+            $("bestOfSelect").addEventListener("change", e => { bestOf = [1, 3, 5, 7].includes(+e.target.value) ? +e.target.value : 1; savePrefs(); renderProPanel(); });
+            $("shotClockSelect").addEventListener("change", e => { shotClockSeconds = [0, 30, 45, 60].includes(+e.target.value) ? +e.target.value : 0; clockRemaining = shotClockSeconds; lastClockAt = performance.now(); savePrefs(); renderProPanel(); });
+            $("poolRaceTarget").addEventListener("change", e => { poolRaceTarget=[5,8,10,15].includes(+e.target.value)?+e.target.value:8; savePrefs(); hud(); });
+            $("pool141Target").addEventListener("change", e => { pool141Target=[25,50,75,100,150].includes(+e.target.value)?+e.target.value:50; savePrefs(); hud(); });
+            $("bankRaceTarget").addEventListener("change", e => { bankRaceTarget=[3,5,8,10].includes(+e.target.value)?+e.target.value:5; savePrefs(); hud(); });
+            $("onePocketRace").addEventListener("change", e => { onePocketRace=[5,6,7,8].includes(+e.target.value)?+e.target.value:8; savePrefs(); hud(); });
+            $("calledPocket").addEventListener("change", e => { calledPocketIndex = e.target.value === "" ? null : Number(e.target.value); });
+            $("proPreset").addEventListener("click", () => {
+                bestOf = 5; shotClockSeconds = 30; clockRemaining = 30; lastClockAt = performance.now();
+                setFx(true); setAim(false); savePrefs(); renderProPanel();
+                say("Preset de torneo local: al mejor de 5, reloj de 30 segundos, efectos activos y guía desactivada.");
+            });
+            $("resetProStats").addEventListener("click", () => {
+                if (!confirm("¿Borrar las estadísticas y el historial profesional guardados en este dispositivo?")) return;
+                proStats = {}; matchHistory = []; saveProData(); renderProPanel();
+            });
+            $("makeTournament").addEventListener("click", () => {
+                const players = Array.from($("tournamentPlayers").querySelectorAll("input:checked")).map(x => x.value).filter(n => ALL_NAMES.includes(n));
+                if (players.length < 2 || players.length > 8) { alert("Elige de 2 a 8 jugadores para la liga local."); return; }
+                const fixtures = []; for (let i = 0; i < players.length; i++) for (let j = i + 1; j < players.length; j++) fixtures.push({a: players[i], b: players[j], winner: null});
+                localTournament = {players, fixtures, created: new Date().toLocaleString("es-PE")}; saveProData(); renderTournament();
+            });
+            $("clearTournament").addEventListener("click", () => {
+                if (!localTournament || !confirm("¿Borrar el fixture y los resultados de la liga local?")) return;
+                localTournament = null; saveProData(); renderTournament();
+            });
+            $("toggleHistory").addEventListener("click", () => {
+                const box = $("proHistory"); box.hidden = !box.hidden;
+                $("toggleHistory").textContent = box.hidden ? "Ver historial local" : "Ocultar historial"; renderProPanel();
+            });
+            document.querySelectorAll("[data-drill]").forEach(b => b.addEventListener("click", () => startDrill(b.dataset.drill)));
+            $("lastReplay").addEventListener("click", () => {
+                if (busy || lastReplay.length < 2) { say("Termina un tiro para poder repetirlo."); return; }
+                paused = false; $("pauseGame").textContent = "⏸ Pausa"; replayPlayback = true; replayStartedAt = performance.now(); closeProPanel();
+                say("Reproduciendo el último tiro. Pulsa Escape para cerrar la repetición.");
+            });
             // INICIO: jugador vs jugador / jugador vs computadora
             function paintHome() {
             $('hPvp').classList.toggle('sel', !vsCpu);
@@ -3944,15 +4378,17 @@
             function openTables() {
             $('tgrid').innerHTML = '';
             tcards.length = 0;
-            TABLES.forEach((T, i) => {
+            [1, 0, 2, 3, 4, 5, 6].forEach(i => {
+            const T = TABLES[i];
             const card = document.createElement('div');
+            card.dataset.tableIndex = i;
             card.className = 'tcard' + (i === tableIdx ? ' sel' : '');
             const c = document.createElement('canvas');
             c.width = 280 * DPR;
             c.height = Math.round(154 * DPR);
             c.getContext('2d').drawImage(getTable(i), 0, 0, c.width, c.height);
             card.appendChild(c);
-            card.insertAdjacentHTML('beforeend', `<b>${i + 1}. ${T.n}</b>${T.ex ? ' ✨' : ''}`);
+            card.insertAdjacentHTML('beforeend', `<b>${i === 1 ? 1 : i === 0 ? 2 : i + 1}. ${T.n}</b>${T.ex ? ' ✨' : ''}`);
             card.addEventListener('click', () => pickTable(i));
             $('tgrid').appendChild(card);
             tcards.push(card);
@@ -3962,34 +4398,36 @@
             function pickTable(i) {
             tableIdx = i;
             tableLayer = getTable(i);
-            tcards.forEach((c, k) => c.classList.toggle('sel', k === i));
+            tcards.forEach(c => c.classList.toggle('sel', +c.dataset.tableIndex === i));
             savePrefs();
             }
             $('backCues').addEventListener('click', () => cueScreen(vsCpu ? 0 : 1));
             $('startGame').addEventListener('click', () => {
+            seriesWins = [0, 0]; activeBestOf = bestOf; matchComplete = false; matchLogged = false;
             newGame();
             show(null);
             });
             // Fin de partida
             function openWin() {
-            if (!gameOver)
-                    return;
-            const w = pn(winner);
-            $('winActions').style.display = 'none';
-            if (isBot(winner)) {
-            $('winTitle').textContent = `🤖 ¡Gana la ${BOT_NAME}!`;
-            $('winSub').textContent = `Nivel ${DIFF_LABEL[diff]}. La computadora no suma puntos en la tabla. ¡Revancha!`;
-            $('winPointBox').style.display = 'none';
-            $('winSkipBox').style.display = 'none';
-            $('winActions').style.display = '';
-            } else {
-            $('winTitle').textContent = `🏆 ¡Gana ${w}!`;
-            $('winSub').textContent = 'Suma el punto a la tabla de victorias.';
-            $('winGive').textContent = `🏆 Sumar punto a ${w}`;
-            $('winPointBox').style.display = '';
-            $('winSkipBox').style.display = '';
-            }
-            show('win');
+                if (!gameOver) return;
+                const w = pn(winner), targetWins = Math.ceil(activeBestOf / 2);
+                $("winActions").style.display = "";
+                $("rematch").textContent = matchComplete ? "🔁 Revancha" : "▶ Siguiente juego";
+                if (!matchComplete) {
+                    $("winTitle").textContent = "🏁 " + w + " gana este juego";
+                    $("winSub").textContent = "Serie " + seriesWins[0] + "–" + seriesWins[1] + " · gana " + targetWins + " para llevarse el encuentro.";
+                    $("winPointBox").style.display = "none"; $("winSkipBox").style.display = "none";
+                } else if (isBot(winner)) {
+                    $("winTitle").textContent = "🤖 ¡La " + BOT_NAME + " gana la serie!";
+                    $("winSub").textContent = "Nivel " + DIFF_LABEL[diff] + " · marcador " + seriesWins[0] + "–" + seriesWins[1] + ". La computadora no suma puntos en la tabla.";
+                    $("winPointBox").style.display = "none"; $("winSkipBox").style.display = "none";
+                } else {
+                    $("winTitle").textContent = "🏆 ¡" + w + " gana la serie!";
+                    $("winSub").textContent = "Marcador final " + seriesWins[0] + "–" + seriesWins[1] + ". Suma una victoria a la tabla local.";
+                    $("winGive").textContent = "🏆 Sumar punto a " + w;
+                    $("winPointBox").style.display = ""; $("winSkipBox").style.display = "";
+                }
+                renderProPanel(); show("win");
             }
             $('winGive').addEventListener('click', () => {
             const n = names[winner];
@@ -4010,10 +4448,12 @@
             $('winActions').style.display = '';
             });
             $('rematch').addEventListener('click', () => {
+            if (matchComplete) { seriesWins = [0, 0]; activeBestOf = bestOf; matchComplete = false; matchLogged = false; }
             newGame();
             show(null);
             });
             $('winMenu').addEventListener('click', () => {
+            seriesWins = [0, 0]; activeBestOf = bestOf; matchComplete = false; matchLogged = false;
             newGame();
             show('home');
             });
@@ -4108,35 +4548,54 @@
             }
 
             let lastPower = - 1;
+            function replayFrameNow() {
+                if (!replayPlayback || lastReplay.length < 2) return null;
+                const idx = Math.floor((performance.now() - replayStartedAt) / 1000 * 30);
+                if (idx >= lastReplay.length) { replayPlayback = false; return null; }
+                return lastReplay[Math.max(0, idx)];
+            }
             function draw() {
             ctx.drawImage(tableLayer, 0, 0, W, H);
+            if (mode === 19) {
+                ctx.save(); ctx.textAlign = "center"; ctx.font = "bold 10px system-ui";
+                onePocketTargets.forEach((pi, p) => {
+                    const q = POCKETS[pi], col = p === 0 ? "#ffd75e" : "#78b9ff";
+                    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.globalAlpha = .9;
+                    ctx.beginPath(); ctx.arc(q.x, q.y, q.r + 7, 0, TAU); ctx.stroke();
+                    ctx.fillStyle = col; ctx.fillText("J" + (p + 1), q.x, q.y + (q.y < MIDY ? 30 : -22));
+                }); ctx.restore();
+            }
+            const replayFrame = replayFrameNow();
+            const replayStateByNum = replayFrame ? new Map(replayFrame.filter(x => x && Number.isInteger(x.n)).map(x => [x.n,x])) : null;
             let ti = 0;
-            for (const b of potted)
+            if (!replayFrame) for (const b of potted)
                     if (b.tray)
                     ctx.drawImage(b.cv, 100 + (ti++) * 23 - 9, 508, 18, 18);
             ctx.fillStyle = 'rgba(0,0,0,.3)';
             ctx.beginPath();
-            for (const b of balls)
-                    if (b.on) {
-            ctx.moveTo(b.x + 3 + R, b.y + 4);
-            ctx.arc(b.x + 3, b.y + 4, R, 0, TAU);
+            for (let i = 0; i < balls.length; i++) {
+                const b = balls[i], state = replayFrame && (replayStateByNum.get(b.n) || replayFrame[i]), on = replayFrame ? !!(state && state.on) : b.on;
+                if (!on) continue;
+                const bx = state ? state.x : b.x, by = state ? state.y : b.y;
+                ctx.moveTo(bx + 3 + R, by + 4); ctx.arc(bx + 3, by + 4, R, 0, TAU);
             }
             ctx.fill();
-            for (const b of balls)
-                    if (b.on) {
-            drawRollingAura(b);
-            if (b.dirty)
-                    renderBall(b);
-            ctx.drawImage(b.cv, b.x - SS / 2, b.y - SS / 2, SS, SS);
+            for (let i = 0; i < balls.length; i++) {
+                const b = balls[i], state = replayFrame && (replayStateByNum.get(b.n) || replayFrame[i]), on = replayFrame ? !!(state && state.on) : b.on;
+                if (!on) continue;
+                const bx = state ? state.x : b.x, by = state ? state.y : b.y;
+                if (!replayFrame) drawRollingAura(b);
+                if (b.dirty) renderBall(b);
+                ctx.drawImage(b.cv, bx - SS / 2, by - SS / 2, SS, SS);
             }
-            drawSinks();
-            if (canShoot()) {
+            if (!replayFrame) drawSinks();
+            if (canShoot() && !replayFrame) {
             const a = aimDir();
             if (aimOn && !isBot(player))
                     drawAim(a);
             drawStick(a);
             }
-            if (inHand && !busy && !gameOver && !uiOpen && !isBot(player)) {
+            if (inHand && !busy && !gameOver && !uiOpen && !isBot(player) && !replayFrame) {
             const ok = validSpot(mouse.x, mouse.y);
             ctx.save();
             ctx.globalAlpha = .7;
@@ -4150,6 +4609,12 @@
             ctx.restore();
             }
 
+            if (replayFrame) {
+                ctx.save(); ctx.fillStyle = "rgba(0,0,0,.68)"; ctx.fillRect(350, 12, 300, 30);
+                ctx.fillStyle = "#f4df9b"; ctx.font = "bold 13px system-ui"; ctx.textAlign = "center";
+                ctx.fillText("REPETICIÓN · ESC PARA CERRAR", 500, 32); ctx.restore();
+            }
+            if (paused) { ctx.save(); ctx.fillStyle="rgba(0,0,0,.68)"; ctx.fillRect(0,0,W,H); ctx.fillStyle="#f3e6bd"; ctx.font="800 30px system-ui"; ctx.textAlign="center"; ctx.fillText("PAUSA",W/2,H/2); ctx.font="14px system-ui"; ctx.fillText("Pulsa Reanudar o Escape para continuar",W/2,H/2+28); ctx.restore(); }
             if (power !== lastPower) {
             $fill.style.width = (power * 100) + '%';
             lastPower = power;
@@ -4157,6 +4622,18 @@
             }
 
             let last = performance.now(), acc = 0, lastPrev = 0;
+            function expireShotClock() {
+                if (uiOpen || paused || busy || gameOver || !shotClockSeconds || isBot(player) || charging) return;
+                const now = performance.now(), elapsed = Math.min(100, now - lastClockAt);
+                lastClockAt = now; clockRemaining = Math.max(0, clockRemaining - elapsed / 1000);
+                if (clockRemaining <= 0) {
+                    const offender = player; player = 1 - player; inHand = true; clockRemaining = shotClockSeconds;
+                    const st = statFor(pn(offender)); st.fouls++; st.run = 0; proStats[pn(offender)] = st; saveProData();
+                    say("⏱ Tiempo agotado: falta de " + pn(offender) + ". " + pn(player) + " recibe bola en mano.");
+                    if (isBot(player)) { bot = null; botT = 0; }
+                    hud();
+                }
+            }
             function loop(t) {
             if (document.hidden) {
             last = t;
@@ -4165,6 +4642,9 @@
             requestAnimationFrame(loop);
             return;
             }
+            if (paused) { last=t; acc=0; SFX.roll(0); draw(); requestAnimationFrame(loop); return; }
+            expireShotClock();
+            updateClockBadge();
             acc += Math.min(t - last, 100);
             last = t;
             while (acc >= STEP) {
@@ -4270,6 +4750,7 @@
             };
             paintLogos();
             renderBoards();
+            renderProPanel();
             pickMode(mode);
             paintHome();
             sprites[0] = buildSprite(CUES[cueIdx[0]]);
