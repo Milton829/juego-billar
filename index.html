@@ -997,11 +997,13 @@
             /* ---------- Geometría de la mesa: bandas, hocicos (jaws) y troneras ----------
              Las bandas son segmentos entre troneras; los extremos son "nudillos" redondeados que
              hacen rebotar la bola cuando entra mal en la boca de la tronera. */
-            const CG = 28, MG = 28, KR = 3.6; // bocas de tronera proporcionadas al diametro de bola
+            const CORNER_POCKET_R = 21, SIDE_POCKET_R = 20, KR = 3.6;
+            // La boca deja pasar el radio de captura más el radio completo de la bola y el nudillo.
+            const CG = 34, MG = Math.ceil(SIDE_POCKET_R + R + KR + 1);
             const POCKETS = [
-            {x: X0 - 4, y: Y0 - 4, r: 15}, {x: X1 + 4, y: Y0 - 4, r: 15},
-            {x: X0 - 4, y: Y1 + 4, r: 15}, {x: X1 + 4, y: Y1 + 4, r: 15},
-            {x: MIDX, y: Y0 - 4, r: 14}, {x: MIDX, y: Y1 + 4, r: 14}
+            {x: X0 - 4, y: Y0 - 4, r: CORNER_POCKET_R}, {x: X1 + 4, y: Y0 - 4, r: CORNER_POCKET_R},
+            {x: X0 - 4, y: Y1 + 4, r: CORNER_POCKET_R}, {x: X1 + 4, y: Y1 + 4, r: CORNER_POCKET_R},
+            {x: MIDX, y: Y0 - 4, r: SIDE_POCKET_R}, {x: MIDX, y: Y1 + 4, r: SIDE_POCKET_R}
             ];
             const mkSeg = (ax, ay, bx, by, nx, ny) => {
             const len = Math.hypot(bx - ax, by - ay);
@@ -2783,8 +2785,8 @@
             g.stroke();
             };
             [[16, Y0], [H - 16, Y1]].forEach(([yo, yi]) => {
-            cush([[X0 - 10, yo], [MIDX - 4, yo], [MIDX - MG, yi], [X0 + CG, yi]], 0, yo, 0, yi);
-            cush([[MIDX + 4, yo], [X1 + 10, yo], [X1 - CG, yi], [MIDX + MG, yi]], 0, yo, 0, yi);
+            cush([[X0 - 10, yo], [MIDX - 14, yo], [MIDX - MG, yi], [X0 + CG, yi]], 0, yo, 0, yi);
+            cush([[MIDX + 14, yo], [X1 + 10, yo], [X1 - CG, yi], [MIDX + MG, yi]], 0, yo, 0, yi);
             });
             [[16, X0], [W - 16, X1]].forEach(([xo, xi]) =>
                     cush([[xo, Y0 - 10], [xo, Y1 + 10], [xi, Y1 - CG], [xi, Y0 + CG]], xo, 0, xi, 0));
@@ -2811,7 +2813,15 @@
             shade(X1 - 12, Y0, 12, Y1 - Y0, X1, 0, X1 - 12, 0);
             g.strokeStyle = 'rgba(0,0,0,.35)';
             g.lineWidth = 3;
-            g.strokeRect(X0, Y0, X1 - X0, Y1 - Y0);
+            g.beginPath();
+            SEGS.forEach(s => { g.moveTo(s.ax, s.ay); g.lineTo(s.bx, s.by); });
+            g.stroke();
+            // Los extremos redondeados visibles coinciden con los obstáculos físicos.
+            g.fillStyle = T.cush[1];
+            g.lineWidth = 1;
+            KNUCKLES.forEach(k => {
+            g.beginPath(); g.arc(k.x, k.y, KR, 0, TAU); g.fill(); g.stroke();
+            });
             g.strokeStyle = T.spot;
             g.lineWidth = 1.2;
             g.beginPath();
@@ -2897,7 +2907,7 @@
             g.stroke();
             // Troneras
             POCKETS.forEach(p => {
-            const vr = p.r + 1.5;
+            const vr = p.r; // mismo radio para el hueco visible y la captura
             let pg = g.createRadialGradient(p.x, p.y, vr * .86, p.x, p.y, vr + 6);
             pg.addColorStop(0, 'rgba(0,0,0,.9)');
             pg.addColorStop(.5, 'rgba(0,0,0,.55)');
@@ -3321,25 +3331,29 @@
             }
             }
 
-            // Tronera: la bola cae cuando su centro entra en la boca; cerca de ella es atraída suavemente
-            function checkPot(b, fromX = b.x, fromY = b.y) {
+            // Barre el recorrido original antes de los rebotes: la potencia no permite saltarse una tronera.
+            function checkPot(b, fromX = b.x, fromY = b.y, attract = true) {
+            if (!b.on) return false;
             const vx = b.x - fromX, vy = b.y - fromY, len2 = vx * vx + vy * vy;
             for (const p of POCKETS) {
             const t = len2 ? clamp(((p.x - fromX) * vx + (p.y - fromY) * vy) / len2, 0, 1) : 1;
             const dx = p.x - (fromX + vx * t), dy = p.y - (fromY + vy * t);
-            if (dx * dx + dy * dy < p.r * p.r) {
+            if (dx * dx + dy * dy <= p.r * p.r) {
             pot(b);
-            return;
+            return true;
             }
             const near = Math.hypot(p.x - b.x, p.y - b.y);
-            if (near < p.r + 12 && near > 0) {
+            if (attract && near < p.r + 12 && near > 0) {
             const pull = .035 * (1 - near / (p.r + 12));
             b.vx += (p.x - b.x) / near * pull;
             b.vy += (p.y - b.y) / near * pull;
             }
             }
-            if (b.x < X0 - R || b.x > X1 + R || b.y < Y0 - R || b.y > Y1 + R)
+            if (b.x < X0 - R || b.x > X1 + R || b.y < Y0 - R || b.y > Y1 + R) {
                     pot(b);
+            return true;
+            }
+            return false;
             }
 
             /* ---------- Reglas BOLA 8 ---------- */
@@ -3590,13 +3604,14 @@
             b.py = b.y;
             b.x += b.vx / SUB;
             b.y += b.vy / SUB;
+            checkPot(b, b.px, b.py, false);
             }
             collideBalls();
             collideBalls();
             for (const b of balls)
                     if (b.on) {
             collideCushions(b);
-            checkPot(b, b.px ?? b.x, b.py ?? b.y);
+            checkPot(b);
             }
             }
             // estela de fuego del taco premium
